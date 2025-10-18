@@ -1,41 +1,65 @@
+# 🗣️ Whispers
 
-````md
-# 📝 AnonBlog
+![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=nextdotjs)
+![Express.js](https://img.shields.io/badge/Express.js-Server-green?logo=express)
+![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-blue?logo=supabase)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-Styling-38B2AC?logo=tailwindcss)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+![Made with ❤️ by Lesuuh](https://img.shields.io/badge/Made_with_%E2%9D%A4_by-Lesuuh-purple)
 
-A platform to **share your thoughts anonymously**.  
-Built with **Next.js 15** (frontend) and **Express.js** (backend).
+---
+
+**Whispers** is a platform where users can **share their thoughts anonymously** — no accounts, no pressure, just pure expression.
+
+Built with **Next.js 15** (frontend), **Express.js** (backend), and **Supabase PostgreSQL** (database), Whispers delivers a sleek, secure, and modern anonymous blogging experience.
 
 ---
 
 ## 🚀 Features
 
-- Post thoughts anonymously
-- Browse by categories
-- Comment on posts
-- Responsive design for mobile & desktop
-- Smooth UI animations and gradients
+- ✍️ Post thoughts anonymously
+- 🧭 Browse posts by categories
+- 💬 Comment without revealing your identity
+- 📱 Fully responsive for mobile and desktop
+- ⚡ Smooth UI transitions & gradients
+- 📦 PWA-ready (installable on devices)
 
 ---
 
 ## 🏗️ Tech Stack
 
-- **Frontend:** Next.js, Tailwind CSS, React Markdown, Axios
-- **Backend:** Express.js, Node.js
-- **Icons:** Lucide React
+**Frontend:**
+
+- Next.js 15
+- React
+- Tailwind CSS
+- React Markdown
+- Axios
+- Lucide React
+
+**Backend:**
+
+- Express.js
+- Node.js
+
+**Database:**
+
+- Supabase (PostgreSQL)
 
 ---
 
 ## 💻 Getting Started
 
-### 1️⃣ Clone the repo
+### 1️⃣ Clone the repository
 
 ```bash
-git clone https://github.com/<your-username>/<repo-name>.git
-cd <repo-name>
+git clone https://github.com/lesuuh/whispers.git
+cd whispers
 ```
-````
 
-### 2️⃣ Frontend
+---
+
+### 2️⃣ Frontend Setup
 
 ```bash
 cd client
@@ -43,9 +67,12 @@ npm install
 npm run dev
 ```
 
-Runs at: `http://localhost:3000`
+App runs at:
+👉 `http://localhost:3000`
 
-### 3️⃣ Backend
+---
+
+### 3️⃣ Backend Setup
 
 ```bash
 cd server
@@ -53,25 +80,71 @@ npm install
 npm start
 ```
 
-Runs at: `http://localhost:5000`
+Server runs at:
+👉 `http://localhost:5000`
 
 ---
 
-## ⚙️ Environment Variables
+<!-- ## ⚙️ Environment Variables -->
 
-**Server (`server/.env`):**
+<!-- Create `.env` files in both the **client** and **server** directories. -->
 
-```
+<!-- **Server (`server/.env`):**
+
+```env
 PORT=5000
-MONGO_URI=<your-mongo-uri>
-JWT_SECRET=<your-secret>
+SUPABASE_URL=<your-supabase-url>
+SUPABASE_ANON_KEY=<your-supabase-anon-key>
+JWT_SECRET=<your-jwt-secret>
 ```
 
 **Client (`client/.env.local`):**
 
-```
+```env
 NEXT_PUBLIC_API_BASE_URL=http://localhost:5000
+NEXT_PUBLIC_SUPABASE_URL=<your-supabase-url>
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-supabase-anon-key> -->
+
 ```
+
+---
+
+## 🧩 Folder Structure
+
+```
+
+whispers/
+├── client/ # Next.js frontend
+│ ├── app/ # Routes & components
+│ ├── public/ # Assets & icons
+│ └── styles/ # Tailwind & global styles
+│
+└── server/ # Express backend
+├── routes/ # API routes
+├── controllers/ # Logic & handling
+├── services/ # Supabase queries
+└── models/ # (optional for structure)
+
+```
+
+---
+
+## 📦 Deployment
+
+- **Frontend:** Vercel
+- **Backend:** Render
+- **Database:** Supabase
+
+Make sure to add your environment variables to your deployment platform settings.
+
+---
+
+## 🧠 Future Improvements
+
+- 🔐 User profiles (optional anonymity)
+- ❤️ Like / react to posts
+- 🔔 Notifications for new comments
+- 📊 Analytics for admins
 
 ---
 
@@ -80,7 +153,21 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:5000
 **Lesuuh** — Frontend Developer
 _"Air it out. Freely. Anonymously."_
 
+---
+
+## 🔗 Links
+
+- 🌐 **Live Demo:** [https://whispers-gold.vercel.app](https://whispers-gold.vercel.app)
+- 🧰 **GitHub Repo:** [https://github.com/lesuuh/whispers](https://github.com/lesuuh/whispers)
+
+---
+
+## 🪪 License
+
+This project is open-source under the **MIT License**.
+
 ```
 
+```
 
 ```
