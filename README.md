@@ -1,3 +1,5 @@
+
+
 # 🗣️ Whispers
 
 ![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=nextdotjs)
@@ -17,40 +19,40 @@ Built with **Next.js 15** (frontend), **Express.js** (backend), and **Supabase P
 
 ## 🚀 Features
 
-- ✍️ Post thoughts anonymously
-- 🧭 Browse posts by categories
-- 💬 Comment without revealing your identity
-- 📱 Fully responsive for mobile and desktop
-- ⚡ Smooth UI transitions & gradients
-- 📦 PWA-ready (installable on devices)
+* ✍️ Post thoughts anonymously
+* 🧭 Browse posts by categories
+* 💬 Comment without revealing your identity
+* 📱 Fully responsive for mobile and desktop
+* ⚡ Smooth UI transitions & gradients
+* 📦 PWA-ready (installable on devices)
 
 ---
 
 ## 🏗️ Tech Stack
 
-**Frontend:**
+### 🖥️ Frontend
 
-- Next.js 15
-- React
-- Tailwind CSS
-- React Markdown
-- Axios
-- Lucide React
+* Next.js 15
+* React
+* Tailwind CSS
+* React Markdown
+* Axios
+* Lucide React
 
-**Backend:**
+### ⚙️ Backend
 
-- Express.js
-- Node.js
+* Express.js
+* Node.js
 
-**Database:**
+### 🗄️ Database
 
-- Supabase (PostgreSQL)
+* Supabase (PostgreSQL)
 
 ---
 
 ## 💻 Getting Started
 
-### 1️⃣ Clone the repository
+### 1️⃣ Clone the Repository
 
 ```bash
 git clone https://github.com/lesuuh/whispers.git
@@ -85,11 +87,11 @@ Server runs at:
 
 ---
 
-<!-- ## ⚙️ Environment Variables -->
+## ⚙️ Environment Variables
 
-<!-- Create `.env` files in both the **client** and **server** directories. -->
+Create `.env` files in both the **client** and **server** directories.
 
-<!-- **Server (`server/.env`):**
+**Server (`server/.env`):**
 
 ```env
 PORT=5000
@@ -103,16 +105,14 @@ JWT_SECRET=<your-jwt-secret>
 ```env
 NEXT_PUBLIC_API_BASE_URL=http://localhost:5000
 NEXT_PUBLIC_SUPABASE_URL=<your-supabase-url>
-NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-supabase-anon-key> -->
-
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-supabase-anon-key>
 ```
 
 ---
 
 ## 🧩 Folder Structure
 
-```
-
+```bash
 whispers/
 ├── client/                 # Next.js frontend
 │   ├── app/                # Routes & components
@@ -124,17 +124,15 @@ whispers/
     ├── controllers/        # Logic & request handling
     ├── services/           # Supabase queries
     └── models/             # (optional) Data structure files
-
-
 ```
 
 ---
 
 ## 📦 Deployment
 
-- **Frontend:** Vercel
-- **Backend:** Render
-- **Database:** Supabase
+* **Frontend:** Vercel
+* **Backend:** Render
+* **Database:** Supabase
 
 Make sure to add your environment variables to your deployment platform settings.
 
@@ -142,29 +140,28 @@ Make sure to add your environment variables to your deployment platform settings
 
 ## 🧠 Future Improvements
 
-- 🔐 User profiles (optional anonymity)
-- ❤️ Like / react to posts
-- 🔔 Notifications for new comments
-- 📊 Analytics for admins
+* 🔐 User profiles (optional anonymity)
+* ❤️ Like / react to posts
+* 🔔 Notifications for new comments
+* 📊 Analytics for admins
 
 ---
 
 ## 👨‍💻 Author
 
 **Lesuuh** — Frontend Developer
-_"Air it out. Freely. Anonymously."_
+*"Air it out. Freely. Anonymously."*
 
 ---
 
 ## 🔗 Links
 
-- 🌐 **Live Demo:** [https://whispers-gold.vercel.app](https://whispers-gold.vercel.app)
-- 🧰 **GitHub Repo:** [https://github.com/lesuuh/whispers](https://github.com/lesuuh/whispers)
+* 🌐 **Live Demo:** [https://whispers-gold.vercel.app](https://whispers-gold.vercel.app)
+* 🧰 **GitHub Repo:** [https://github.com/lesuuh/whispers](https://github.com/lesuuh/whispers)
 
 ---
 
 ## 🪪 License
 
 This project is open-source under the **MIT License**.
-
 
