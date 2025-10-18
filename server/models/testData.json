@@ -1,0 +1,129 @@
+[
+  {
+    "id": 1,
+    "title": "Why Lagos Traffic Feels Like a Daily Battle",
+    "category": "Lifestyle",
+    "content": "Every morning feels like a mission. From Ojota to Victoria Island, the endless honking, impatient danfo drivers, and sudden rain all add to the chaos. Sometimes, it makes me wonder if this is what survival looks like in Lagos.",
+    "author": "Anonymous",
+    "createdAt": "2025-10-09T09:30:00Z",
+    "comments": [
+      {
+        "author": "GentleWish_AI",
+        "text": "This is an anonymous comment for post 1"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "The Pressure to Always Be Online",
+    "category": "Mental Health",
+    "content": "It feels like if you’re not tweeting, posting, or replying to messages, you’re invisible. I miss the days when being offline didn’t mean being forgotten.",
+    "author": "Anonymous",
+    "createdAt": "2025-10-08T15:22:00Z",
+    "comments": []
+  },
+  {
+    "id": 3,
+    "title": "When Job Hunting Becomes a Full-Time Job",
+    "category": "Career",
+    "content": "I’ve applied for over 50 roles this month alone. The silence from recruiters hurts more than the rejections. Sometimes I just want to know what I’m doing wrong.",
+    "author": "Anonymous",
+    "createdAt": "2025-10-07T12:00:00Z",
+    "comments": [
+      { "text": "This is an anonymous comment for post 3" },
+      {
+        "author": "Lost Nova",
+        "text": "This is an anonymous comment for post 3"
+      },
+      {
+        "author": "Misty River",
+        "text": "This is an anonymous comment for post 3"
+      },
+      {
+        "author": "ElectricSeer_AI",
+        "text": "This is an anonymous comment for post 3"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Hostel Life Is Not for the Weak",
+    "category": "Student Life",
+    "content": "Between noisy roommates, water scarcity, and midnight power cuts, surviving hostel life is a full course on patience and self-control.",
+    "author": "Anonymous",
+    "createdAt": "2025-10-06T18:10:00Z",
+    "comments": []
+  },
+  {
+    "id": 5,
+    "title": "Nigeria’s Cost of Living Is Becoming Scary",
+    "category": "Society",
+    "content": "Prices are rising every week — transport, food, even sachet water. How do people earning 40k a month survive in this economy?",
+    "author": "Anonymous",
+    "createdAt": "2025-10-05T11:45:00Z",
+    "comments": []
+  },
+  {
+    "id": 6,
+    "title": "The Struggles of Learning Node.js",
+    "category": "Programming",
+    "content": "Learning Node.js can be tough at first, but building small projects helps solidify concepts and makes it more fun.",
+    "author": "Anonymous51",
+    "createdAt": "2025-10-09T02:40:35.667Z",
+    "comments": []
+  },
+  {
+    "id": 7,
+    "title": "The Struggles of Learning Node.js",
+    "category": "Programming",
+    "content": "Learning Node.js can be tough at first, but building small projects helps solidify concepts and makes it more fun.",
+    "author": "Anonymous61",
+    "createdAt": "2025-10-09T02:40:55.225Z",
+    "comments": []
+  },
+  {
+    "id": 8,
+    "title": "The Struggles of Learning Nextjs",
+    "category": "Programming",
+    "content": "Learning Nextjs can be tough at first, but building small projects helps solidify concepts and makes it more fun.",
+    "author": "Wolf",
+    "createdAt": "2025-10-09T08:46:12.474Z",
+    "comments": []
+  },
+  {
+    "id": 9,
+    "title": "The Struggles of Learning Nextjs",
+    "category": "Programming",
+    "content": "Learning Nextjs can be tough at first, but building small projects helps solidify concepts and makes it more fun.",
+    "author": "HiddenPhantom_AI",
+    "createdAt": "2025-10-09T08:46:33.922Z",
+    "comments": []
+  },
+  {
+    "id": 10,
+    "title": "Time will tell",
+    "category": "Thoughts",
+    "content": "Have you ever wondered what is it to stop time, i guess, we won't know. Time is always moving",
+    "author": "LonelyGlitch_Byte",
+    "createdAt": "2025-10-09T13:09:28.922Z",
+    "comments": []
+  },
+  {
+    "id": 11,
+    "title": "The Power of Consistency: How Small Steps Lead to Big Results",
+    "category": "Perosnal Development",
+    "content": "Most people start with big dreams — to learn a skill, build a business, or become the best version of themselves. But somewhere along the way, motivation fades, distractions pile up, and goals slowly drift into the background. What separates those who actually achieve their dreams from those who don’t isn’t talent, luck, or timing. It’s consistency.\n\nConsistency isn’t glamorous. It doesn’t bring instant results or dramatic progress overnight. It’s about showing up every single day, even when you don’t feel like it. It’s waking up early to code when your bed feels warmer, writing that extra paragraph when you’d rather scroll through social media, or choosing to learn one new concept daily instead of binge-watching a show.\n\nOver time, those small choices compound. One line of code becomes a project. One blog post becomes a portfolio. One step at a time, you build something that lasts. Most people quit because they underestimate the power of these small, consistent efforts. They look for intensity instead of persistence — but intensity fades, while persistence grows stronger.\n\n“Success is the sum of small efforts, repeated day in and day out.” — Robert Collier\n\nLet’s be honest — consistency doesn’t mean perfection. There will be days when you miss a task, lose focus, or feel unmotivated. What matters most is bouncing back quickly. Instead of punishing yourself for missing a day, refocus and continue. The moment you decide to keep going despite setbacks is the moment you become unstoppable.\n\nIn my journey as a developer, I’ve learned that the hardest part isn’t understanding syntax or frameworks — it’s staying consistent. When I first started learning React, I used to compare myself to others who seemed far ahead. But I realized progress isn’t about speed; it’s about sustainability. Coding a little every day built my confidence more than any all-night study session ever could.\n\nConsistency also builds trust — not just in your work, but in yourself. Every time you keep a promise to yourself, no matter how small, you reinforce the belief that you can rely on you. That internal trust becomes the foundation for bigger goals and bolder dreams.\n\nSo, if you’re struggling to stay on track, remember: you don’t need to do everything today. You just need to do something. Take one small action toward your goal. Because small steps, when taken daily, will always beat giant leaps that happen once in a while.\n\nKeep showing up. Keep improving. Your future self will thank you.",
+    "author": "The Drift",
+    "createdAt": "2025-10-09T14:07:38.938Z",
+    "comments": []
+  },
+  {
+    "id": 12,
+    "title": "How I Built My First Full-Stack Web App from Scratch",
+    "category": "Programming",
+    "content": "When I first started learning web development, the idea of building a full-stack application felt almost impossible. I understood bits and pieces of HTML and CSS, but every time I saw backend code, it looked like an alien language. JavaScript was the bridge that connected everything for me — once I understood how it worked in the browser, it was only a matter of time before I wanted to see what it could do on the server.\n\nI remember the first time I opened a terminal to create a simple Node.js server. My hands were literally shaking as I typed npm init -y. I didn’t even know what that command did — I just knew that every tutorial told me to run it. But with time, I began to understand that it created a package file, a sort of “manifest” that kept track of everything my app depended on.\n\nAfter getting comfortable with Express.js, I realized how powerful it was. Routing requests, sending JSON responses, and connecting to a database suddenly didn’t seem so scary. I started connecting my frontend with my backend, and when I saw data actually moving between them, it felt like magic.\n\nOne of the biggest lessons I learned while building my first full-stack project was how to think in layers.\nAt first, I wrote all my logic in one file — routes, database connections, everything jammed together. It worked, but it was messy. Then I learned about the MVC (Model-View-Controller) pattern, and that changed everything. Separating logic into layers made my code easier to read and debug. It also made it easier to add new features without breaking old ones.\n\nAnother important step was deploying my app online. Locally, everything worked perfectly, but the moment I tried deploying, I ran into issues — environment variables weren’t loading, the database URL wasn’t connecting, and CORS errors were popping up everywhere. I spent hours debugging, but in the end, I realized it was all part of the learning process.\nDeploying teaches patience, discipline, and a bit of humility. Once I finally got it live, the feeling of visiting my site on a real URL was unmatched.\n\nLooking back, what started as a simple hobby has now turned into a real skill set. I can build apps that users can log into, store data securely, and interact with in real time. But most importantly, I now understand how the web actually works — from sending a request to receiving a response, and everything in between.\n\nFor anyone reading this who’s just starting out: keep building, keep breaking things, and don’t be afraid to fail. The best developers aren’t the ones who never make mistakes — they’re the ones who learn the fastest from them.",
+    "author": "Ember",
+    "createdAt": "2025-10-09T19:38:47.535Z",
+    "comments": []
+  }
+]

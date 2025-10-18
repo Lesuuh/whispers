@@ -1,0 +1,210 @@
+"use client";
+
+import { useState, FormEvent } from "react";
+import { useParams } from "next/navigation";
+import axios from "axios";
+import { Calendar, User, Clock, MessageCircle } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { timeAgo } from "@/app/utils/date";
+import { CommentResponse, NewComment, Post } from "@/app/utils/types";
+
+// ================== Component ==================
+const Page = () => {
+  const { postId } = useParams<{ postId: string }>();
+  const [comment, setComment] = useState("");
+  const queryClient = useQueryClient();
+  const base_url = process.env.NEXT_PUBLIC_API_URL;
+
+  // 🔹 Fetch post
+  const {
+    data: post,
+    isLoading: loadingPost,
+    isError: errorPost,
+  } = useQuery<Post>({
+    queryKey: ["post", postId],
+    queryFn: async () => {
+      const res = await axios.get<Post>(`${base_url}/posts/${postId}`);
+      return res.data;
+    },
+  });
+
+  const addComment = async (
+    newComment: NewComment
+  ): Promise<CommentResponse> => {
+    const res = await axios.post(
+      `${base_url}/posts/${postId}/comments`,
+      newComment
+    );
+    return res.data;
+  };
+
+  // 🔹 Post comment
+  const mutation = useMutation<CommentResponse, Error, NewComment>({
+    mutationFn: addComment,
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+    },
+    onError: (error: Error) => {
+      console.error("Error adding comment:", error.message);
+    },
+  });
+  console.log(post);
+
+  // 🔹 Handle form submit
+  const handleCommentSubmit = (e: FormEvent) => {
+    e.preventDefault();
+
+    if (!comment.trim()) return;
+
+    mutation.mutate({ comment });
+
+    setComment("");
+  };
+
+  if (loadingPost)
+    return (
+      <div className="flex items-center justify-center h-screen text-gray-500">
+        Loading post...
+      </div>
+    );
+
+  if (errorPost)
+    return (
+      <div className="flex items-center justify-center h-screen text-red-500">
+        Failed to load post 😔
+      </div>
+    );
+
+  if (!post)
+    return (
+      <div className="flex items-center justify-center h-screen text-gray-500">
+        Post not found
+      </div>
+    );
+
+  // const formattedDate = new Date(post.createdAt).toLocaleString("en-US", {
+  //   dateStyle: "medium",
+  //   timeStyle: "short",
+  // });
+
+  return (
+    <section className="max-w-4xl mx-auto px-4 py-10">
+      {/* Category */}
+      <span className="inline-block px-3 py-1.5 rounded-full bg-purple-50 text-purple-700 text-xs font-semibold uppercase tracking-wide">
+        {post.category}
+      </span>
+
+      {/* Title */}
+      <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mt-4 leading-snug">
+        {post.title}
+      </h1>
+
+      {/* Meta Info */}
+      <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mt-3">
+        <div className="flex items-center gap-1">
+          <User className="w-4 h-4" />
+          <span>{post.author || "Anonymous"}</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <Calendar className="w-4 h-4" />
+          {/* <span>{formattedDate}</span> */}
+          <span>{timeAgo(post.created_at)}</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <Clock className="w-4 h-4" />
+          <span>~ 2 min read</span>
+        </div>
+      </div>
+
+      <hr className="my-6 border-gray-200" />
+
+      {/* Post Content */}
+      <div className="prose prose-gray max-w-none text-gray-700 leading-relaxed whitespace-pre-line">
+        <ReactMarkdown>{post.content}</ReactMarkdown>
+      </div>
+
+      {/* Comments */}
+      <div className="mt-12 border-t border-gray-200 pt-6">
+        <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+          <MessageCircle className="w-5 h-5 text-purple-700" />
+          Join the Discussion
+        </h2>
+
+        {/* Form */}
+        <form
+          onSubmit={handleCommentSubmit}
+          className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full"
+        >
+          <textarea
+            id="comment"
+            name="comment"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            placeholder="💭 Share your thoughts..."
+            rows={3}
+            className="flex-1 w-full py-3 rounded-xl text-sm bg-white border border-gray-200 px-4 text-gray-700 
+              focus:border-purple-600 focus:outline-none focus:ring-1 focus:ring-purple-600 transition-all duration-200 resize-none"
+          />
+          <button
+            type="submit"
+            disabled={mutation.isPending}
+            className="w-full sm:w-auto bg-gray-900 text-white px-6 py-3 rounded-xl font-medium 
+              hover:bg-purple-700 hover:scale-105 transition-all duration-200 disabled:opacity-60"
+          >
+            {mutation.isPending ? "Posting..." : "Comment"}
+          </button>
+        </form>
+
+        {/* Comments List */}
+        <div className="mt-8 space-y-6">
+          {loadingPost ? (
+            // Skeleton loading
+            <div className="space-y-4">
+              {[1, 2, 3].map((n) => (
+                <div
+                  key={n}
+                  className="border border-gray-100 bg-gray-50 rounded-2xl p-4 animate-pulse"
+                >
+                  <div className="flex justify-between mb-2">
+                    <div className="h-4 w-24 bg-gray-200 rounded"></div>
+                    <div className="h-3 w-16 bg-gray-200 rounded"></div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="h-3 w-full bg-gray-200 rounded"></div>
+                    <div className="h-3 w-4/5 bg-gray-200 rounded"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : post.comments.length === 0 ? (
+            <p className="text-gray-500 text-sm italic text-center">
+              No comments yet — be the first to share your thoughts 💭
+            </p>
+          ) : (
+            post.comments.map((c) => (
+              <div
+                key={c.id}
+                className="border border-gray-100 bg-gray-50 rounded-2xl p-4 hover:shadow-sm transition"
+              >
+                <div className="flex justify-between items-center mb-2">
+                  <p className="text-sm font-semibold text-gray-800">
+                    {c.author || "Anonymous"}
+                  </p>
+                  <span className="text-xs text-gray-500">
+                    {timeAgo(c.created_at)}
+                  </span>
+                </div>
+                <div className="prose prose-gray max-w-none whitespace-pre-line text-gray-700 text-sm leading-relaxed">
+                  <ReactMarkdown>{c.comment}</ReactMarkdown>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Page;
