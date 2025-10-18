@@ -3,6 +3,7 @@ import { Syne, Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "./_components/home/Navbar";
 import ReactQueryProvider from "./providers/ReactQueryProviders";
+import { Analytics } from "@vercel/analytics/next";
 
 const syne = Syne({
   subsets: ["latin"],
@@ -99,7 +100,9 @@ export default function RootLayout({
       >
         <ReactQueryProvider>
           <Navbar />
-          <main className="min-h-screen">{children}</main>
+          <main className="min-h-screen">
+            {children} <Analytics />
+          </main>
           <footer className="py-8 text-center text-sm text-gray-500 border-t border-gray-200">
             <p>
               © {new Date().getFullYear()} Whispers — Speak Freely, Stay

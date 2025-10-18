@@ -196,7 +196,7 @@ const PostForm: React.FC<ModalProps> = ({ setIsOpen }) => {
           )}
           <button
             type="submit"
-            className="px-8 py-3 w-full bg-primary-500 text-white rounded-4xl bg-gray-900 shadow hover:bg-purple-600  hover:scale-105 
+            className="px-8 py-3 w-full bg-primary-500 text-white rounded-xl bg-gray-900 shadow hover:bg-purple-600  hover:scale-101 
     transition 
     duration-200 
     ease-in-out"
