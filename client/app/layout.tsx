@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/client/public/whispers_logo.png", // add in /public
+        url: "/whispers_logo.png", // add in /public
         width: 1200,
         height: 630,
         alt: "Whispers — Anonymous Voices, Shared Stories",
@@ -62,14 +62,15 @@ export const metadata: Metadata = {
     description:
       "Read and share anonymous confessions and thoughts without judgment.",
     creator: "@uklesuuh", // replace or remove if you don’t have X/Twitter
-    images: ["/client/public/whispers_logo.png"],
+    images: ["/whispers_logo.png"],
   },
   icons: {
     icon: "/favicon.ico",
-    apple: "/client/public/whispers_logo_small.png",
+    apple: "/whispers_logo_small.png",
   },
   // manifest: "/site.webmanifest",
-  manifest: "/manifest.webmanifest",
+  // manifest: "/manifest.webmanifest",
+  manifest: "./manifest.ts",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
