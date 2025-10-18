@@ -70,7 +70,7 @@ export const metadata: Metadata = {
   },
   // manifest: "/site.webmanifest",
   // manifest: "/manifest.webmanifest",
-  manifest: "./manifest.ts",
+  manifest: "./manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -108,10 +108,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <head>
-        <link
-          rel="apple-touch-icon"
-          href="/client/public/whispers_logo_small.png"
-        />
+        <link rel="apple-touch-icon" href="/whispers_logo_small.png" />
       </head>
       <body
         className={`${syne.variable} ${inter.variable} antialiased bg-neutral-50 text-gray-900`}

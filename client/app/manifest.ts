@@ -12,13 +12,13 @@ export default function manifest(): MetadataRoute.Manifest {
     orientation: "portrait-primary",
     icons: [
       {
-        src: "/client/public/whispers_logo_small.png",
+        src: "/whispers_logo_small.png",
         sizes: "192x192",
         type: "image/png",
         purpose: "maskable",
       },
       {
-        src: "//client/public/whispers_logo.png",
+        src: "/whispers_logo.png",
         sizes: "512x512",
         type: "image/png",
         purpose: "maskable",
