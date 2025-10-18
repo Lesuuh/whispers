@@ -96,16 +96,13 @@ Create `.env` files in both the **client** and **server** directories.
 ```env
 PORT=5000
 SUPABASE_URL=<your-supabase-url>
-SUPABASE_ANON_KEY=<your-supabase-anon-key>
-JWT_SECRET=<your-jwt-secret>
+SUPABASE_KEY=<your-supabase-anon-key>
 ```
 
 **Client (`client/.env.local`):**
 
 ```env
 NEXT_PUBLIC_API_BASE_URL=http://localhost:5000
-NEXT_PUBLIC_SUPABASE_URL=<your-supabase-url>
-NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-supabase-anon-key>
 ```
 
 ---
@@ -140,10 +137,10 @@ Make sure to add your environment variables to your deployment platform settings
 
 ## 🧠 Future Improvements
 
-* 🔐 User profiles (optional anonymity)
+<!-- * 🔐 User profiles (optional anonymity) -->
 * ❤️ Like / react to posts
 * 🔔 Notifications for new comments
-* 📊 Analytics for admins
+<!-- * 📊 Analytics for admins -->
 
 ---
 
