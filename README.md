@@ -114,16 +114,17 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-supabase-anon-key> -->
 ```
 
 whispers/
-├── client/ # Next.js frontend
-│ ├── app/ # Routes & components
-│ ├── public/ # Assets & icons
-│ └── styles/ # Tailwind & global styles
+├── client/                 # Next.js frontend
+│   ├── app/                # Routes & components
+│   ├── public/             # Assets & icons
+│   └── styles/             # Tailwind & global styles
 │
-└── server/ # Express backend
-├── routes/ # API routes
-├── controllers/ # Logic & handling
-├── services/ # Supabase queries
-└── models/ # (optional for structure)
+└── server/                 # Express backend
+    ├── routes/             # API routes
+    ├── controllers/        # Logic & request handling
+    ├── services/           # Supabase queries
+    └── models/             # (optional) Data structure files
+
 
 ```
 
@@ -166,8 +167,4 @@ _"Air it out. Freely. Anonymously."_
 
 This project is open-source under the **MIT License**.
 
-```
 
-```
-
-```
