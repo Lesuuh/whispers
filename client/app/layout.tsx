@@ -37,18 +37,18 @@ export const metadata: Metadata = {
   authors: [{ name: "Whispers Team" }],
   creator: "Whispers",
   publisher: "Whispers",
-  metadataBase: new URL("https://whispers.app"), // replace with your domain
+  metadataBase: new URL("https://whispers-gold.vercel.app"),
   openGraph: {
     title: "Whispers — Anonymous Voices, Shared Stories",
     description:
       "Read and share anonymous confessions, stories, and experiences. A safe place for your truest thoughts.",
-    url: "https://whispers.app",
+    url: "https://whispers-gold.vercel.app",
     siteName: "Whispers",
     locale: "en_US",
     type: "website",
     images: [
       {
-        url: "/og-whispers.png", // add in /public
+        url: "/client/public/whispers_logo.png", // add in /public
         width: 1200,
         height: 630,
         alt: "Whispers — Anonymous Voices, Shared Stories",
@@ -60,12 +60,12 @@ export const metadata: Metadata = {
     title: "Whispers — Anonymous Voices, Shared Stories",
     description:
       "Read and share anonymous confessions and thoughts without judgment.",
-    creator: "@whispers_app", // replace or remove if you don’t have X/Twitter
-    images: ["/og-whispers.png"],
+    creator: "@uklesuuh", // replace or remove if you don’t have X/Twitter
+    images: ["/client/public/whispers_logo.png"],
   },
   icons: {
     icon: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
+    apple: "/client/public/whispers_logo_small.png",
   },
   manifest: "/site.webmanifest",
 
@@ -85,7 +85,7 @@ export const metadata: Metadata = {
 export const viewPort = {
   width: "device-width",
   initialScale: 1,
-  // themeColor: "#ffffff",
+  themeColor: "#ffffff",
 };
 
 export default function RootLayout({
