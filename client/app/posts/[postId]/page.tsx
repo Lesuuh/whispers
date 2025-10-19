@@ -3,7 +3,7 @@
 import { useState, FormEvent } from "react";
 import { useParams } from "next/navigation";
 import axios from "axios";
-import { Calendar, User, Clock, MessageCircle } from "lucide-react";
+import { Calendar, User, Clock, MessageCircle, Share2 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { timeAgo } from "@/app/utils/date";
@@ -62,6 +62,25 @@ const Page = () => {
     setComment("");
   };
 
+  // 🔹 Handle share
+  const handleShare = async () => {
+    const shareData = {
+      title: post?.title,
+      text: post?.content,
+      url: `${window.location.origin}/posts/${post?.id}`,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (error) {
+        console.error("Share failed", error);
+      }
+    } else {
+      navigator.clipboard.writeText(shareData.url);
+      alert("Whisper link copied");
+    }
+  };
   if (loadingPost)
     return (
       <div className="flex items-center justify-center h-screen text-gray-500">
@@ -113,8 +132,22 @@ const Page = () => {
         </div>
         <div className="flex items-center gap-1">
           <Clock className="w-4 h-4" />
-          <span>~ 2 min read</span>
+          <span>2 min</span>
         </div>
+        {/* <div className="flex items-center gap-1">
+          <MessageCircle className="w-4 h-4" />
+          <span>{post.comments.length} comments</span>
+        </div> */}
+
+        {/* Share Button */}
+        <button
+          onClick={handleShare}
+          className="ml-auto flex items-center gap-2 px-4 py-2 text-gray-700 bg-white  rounded-lg hover:bg-purple-50 hover:text-purple-700 hover:border-purple-300 transition-all duration-300"
+          aria-label="Share post"
+        >
+          <Share2 className="w-4 h-4" />
+          <span className="text-sm hidden md:flex font-medium">Share</span>
+        </button>
       </div>
 
       <hr className="my-6 border-gray-200" />
