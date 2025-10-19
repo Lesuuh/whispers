@@ -143,34 +143,33 @@ const comments = async (req, res) => {
 
 const incrementShare = async (req, res) => {
   const { id } = req.params;
+  console.log("Increment share for post:", id);
 
   try {
-    // getting the post
+    // Step 1: Get current share_count
     const { data: post, error: fetchError } = await supabase
       .from("posts")
       .select("share_count")
       .eq("id", id)
       .single();
 
-    if (fetchError) {
-      throw fetchError;
-    }
+    if (fetchError) throw fetchError;
 
-    // increase count
+    // Step 2: Increment count
     const newCount = (post.share_count || 0) + 1;
 
-    // update the share count field
+    // Step 3: Update share_count
     const { error: updateError } = await supabase
       .from("posts")
       .update({ share_count: newCount })
       .eq("id", id);
 
-    if (updateError) updateError;
+    if (updateError) throw updateError;
 
-    // respond
+    // Step 4: Respond
     res.status(200).json({ message: "Share count updated", newCount });
   } catch (error) {
-    console.error("Error occured", error);
+    console.error("Error incrementing share count:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };

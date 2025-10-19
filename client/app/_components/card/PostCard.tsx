@@ -1,12 +1,13 @@
 import { Post } from "@/app/utils/types";
+import axios from "axios";
 import Link from "next/link";
 
 export const PostCard = ({ post }: { post: Post }) => {
   const handleShare = async () => {
     const shareData = {
-      title: post.title,
-      text: post.content,
-      url: `${window.location.origin}/posts/${post.id}`,
+      title: post?.title,
+      text: post?.content,
+      url: `${window.location.origin}/posts/${post?.id}`,
     };
 
     if (navigator.share) {
@@ -18,6 +19,14 @@ export const PostCard = ({ post }: { post: Post }) => {
     } else {
       navigator.clipboard.writeText(shareData.url);
       alert("Whisper link copied");
+    }
+
+    try {
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/posts/${post.id}/share`
+      );
+    } catch (err) {
+      console.error("Share count update failed:", err);
     }
   };
   return (

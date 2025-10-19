@@ -49,7 +49,6 @@ const Page = () => {
       console.error("Error adding comment:", error.message);
     },
   });
-  console.log(post);
 
   // 🔹 Handle form submit
   const handleCommentSubmit = (e: FormEvent) => {
@@ -64,11 +63,16 @@ const Page = () => {
 
   // 🔹 Handle share
   const handleShare = async () => {
+    console.log(post?.id);
+    console.log(postId);
+
     const shareData = {
       title: post?.title,
       text: post?.content,
-      url: `${window.location.origin}/posts/${post?.id}`,
+      url: `${window.location.origin}/posts/${postId}`,
     };
+
+    console.log(shareData);
 
     if (navigator.share) {
       try {
@@ -80,11 +84,20 @@ const Page = () => {
       navigator.clipboard.writeText(shareData.url);
       alert("Whisper link copied");
     }
+
+    try {
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/posts/${post?.id}/share`
+      );
+    } catch (err) {
+      console.error("Share count update failed:", err);
+    }
   };
+
   if (loadingPost)
     return (
       <div className="flex items-center justify-center h-screen text-gray-500">
-        Loading post...
+        Loading Whisper......
       </div>
     );
 
@@ -120,33 +133,33 @@ const Page = () => {
       </h1>
 
       {/* Meta Info */}
-      <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mt-3">
-        <div className="flex items-center gap-1">
-          <User className="w-4 h-4" />
-          <span>{post.author || "Anonymous"}</span>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-4">
+        {/* Left side - Meta data */}
+        <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-sm text-gray-500">
+          <div className="flex items-center gap-1.5">
+            <User className="w-4 h-4" />
+            <span>{post.author || "Anonymous"}</span>
+          </div>
+          <span className="hidden sm:inline text-gray-300">•</span>
+          <div className="flex items-center gap-1.5">
+            <Calendar className="w-4 h-4" />
+            <span>{timeAgo(post.created_at)}</span>
+          </div>
+          <span className="hidden sm:inline text-gray-300">•</span>
+          <div className="flex items-center gap-1.5">
+            <Clock className="w-4 h-4" />
+            <span>~ 2 min read</span>
+          </div>
         </div>
-        <div className="flex items-center gap-1">
-          <Calendar className="w-4 h-4" />
-          {/* <span>{formattedDate}</span> */}
-          <span>{timeAgo(post.created_at)}</span>
-        </div>
-        <div className="flex items-center gap-1">
-          <Clock className="w-4 h-4" />
-          <span>2 min</span>
-        </div>
-        {/* <div className="flex items-center gap-1">
-          <MessageCircle className="w-4 h-4" />
-          <span>{post.comments.length} comments</span>
-        </div> */}
 
-        {/* Share Button */}
+        {/* Right side - Share Button */}
         <button
           onClick={handleShare}
-          className="ml-auto flex items-center gap-2 px-4 py-2 text-gray-700 bg-white  rounded-lg hover:bg-purple-50 hover:text-purple-700 hover:border-purple-300 transition-all duration-300"
+          className="flex items-center justify-center gap-2 px-5 py-2.5 text-gray-700 rounded-lg hover:bg-purple-50 hover:text-purple-700 hover:border-purple-300 transition-all duration-300  w-full sm:w-auto"
           aria-label="Share post"
         >
           <Share2 className="w-4 h-4" />
-          <span className="text-sm hidden md:flex font-medium">Share</span>
+          <span className="text-sm font-medium">Share</span>
         </button>
       </div>
 
@@ -159,10 +172,27 @@ const Page = () => {
 
       {/* Comments */}
       <div className="mt-12 border-t border-gray-200 pt-6">
-        <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-          <MessageCircle className="w-5 h-5 text-purple-700" />
-          Join the Discussion
-        </h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+            <MessageCircle className="w-5 h-5 text-purple-700" />
+            Join the Discussion
+          </h2>
+
+          {/* Engagement Stats */}
+          <div className="flex items-center gap-3 text-sm text-gray-500">
+            <span className="flex items-center gap-1">
+              <MessageCircle className="w-4 h-4" />
+              {post.comments.length}{" "}
+              {post.comments.length === 1 ? "comment" : "comments"}
+            </span>
+            <span className="text-gray-300">•</span>
+            <span className="flex items-center gap-1">
+              <Share2 className="w-4 h-4" />
+              {post.share_count || 0}{" "}
+              {post.share_count === 1 ? "share" : "shares"}
+            </span>
+          </div>
+        </div>
 
         {/* Form */}
         <form

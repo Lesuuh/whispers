@@ -16,6 +16,7 @@ export interface Post {
   category: string;
   author?: string;
   created_at: string;
+  share_count: number;
   comments: CommentResponse[];
 }
 
