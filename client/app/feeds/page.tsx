@@ -31,7 +31,7 @@ export default function FeedsPage() {
 
       {/* Feeds Content Section */}
       <section className="w-full py-12">
-        <div className="max-w-6xl mx-auto sm:px-6 lg:px-8">
+        <div className=" mx-auto sm:px-6 lg:px-8">
           <FeedsSection selectedCategory={selectedCategory} />
         </div>
       </section>
