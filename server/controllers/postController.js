@@ -141,4 +141,38 @@ const comments = async (req, res) => {
   }
 };
 
-module.exports = { getAllPosts, createPost, getPost, comments };
+const incrementShare = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // getting the post
+    const { data: post, error: fetchError } = await supabase
+      .from("posts")
+      .select("share_count")
+      .eq("id", id)
+      .single();
+
+    if (fetchError) {
+      throw fetchError;
+    }
+
+    // increase count
+    const newCount = (post.share_count || 0) + 1;
+
+    // update the share count field
+    const { error: updateError } = await supabase
+      .from("posts")
+      .update({ share_count: newCount })
+      .eq("id", id);
+
+    if (updateError) updateError;
+
+    // respond
+    res.status(200).json({ message: "Share count updated", newCount });
+  } catch (error) {
+    console.error("Error occured", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+module.exports = { getAllPosts, createPost, getPost, comments, incrementShare };
