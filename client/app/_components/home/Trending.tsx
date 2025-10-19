@@ -1,4 +1,5 @@
 "use client";
+
 import axios from "axios";
 import { PostCard } from "../card/PostCard";
 import { useQuery } from "@tanstack/react-query";
@@ -8,32 +9,18 @@ import { usePathname } from "next/navigation";
 const FeedsSection = ({ selectedCategory }: { selectedCategory: string }) => {
   const pathname = usePathname();
   const isFeedsPage = pathname === "/feeds";
-  const base_url = process.env.NEXT_PUBLIC_API_URL;
-
   const fetchPosts = async () => {
+    const base_url = process.env.NEXT_PUBLIC_API_URL;
     const res = await axios.get(
       `${base_url}/posts?category=${selectedCategory}`
     );
     return res.data;
   };
-
-  const fetchTrendingPosts = async () => {
-    const res = await axios.get(`${base_url}/posts/trending`);
-    return res.data.trending;
-  };
-
-  // Fix: Add selectedCategory to queryKey so it refetches on category change
   const { data: posts = [], isLoading } = useQuery<Post[]>({
-    queryKey: ["posts", selectedCategory],
+    queryKey: ["posts"],
     queryFn: fetchPosts,
   });
 
-  const { data: trending = [], isLoading: trendingLoading } = useQuery<Post[]>({
-    queryKey: ["trending"],
-    queryFn: fetchTrendingPosts,
-  });
-
-  // Filter posts based on category (though your API already does this)
   const filteredPosts =
     selectedCategory !== " "
       ? posts.filter((post) => post.category === selectedCategory)
@@ -42,33 +29,19 @@ const FeedsSection = ({ selectedCategory }: { selectedCategory: string }) => {
   const latestPosts = filteredPosts.slice(0, 6);
   const allPosts = filteredPosts.slice(6);
 
-  if (isLoading || trendingLoading) {
+  if (isLoading) {
     return (
       <div className="text-center py-10 text-gray-500">Loading whispers...</div>
     );
   }
 
   return (
-    <div className="space-y-10">
-      {/* Trending Section - Only show if we have trending posts */}
-      {trending.length > 0 && (
-        <div>
-          <h3 className="text-xl font-bold text-gray-900 mb-6">
-            🔥 Trending Whispers
-          </h3>
-          <div className="grid gap-6 grid-cols-1 w-full sm:grid-cols-2 lg:grid-cols-3">
-            {trending.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Latest Posts Section */}
+    <div>
       <div>
         <h3 className="text-xl font-bold text-gray-900 mb-6">
           Latest Whispers
         </h3>
+
         {latestPosts.length === 0 ? (
           <div className="flex flex-col items-center justify-center text-center py-16">
             <h4 className="text-lg font-semibold text-gray-700">
@@ -88,17 +61,28 @@ const FeedsSection = ({ selectedCategory }: { selectedCategory: string }) => {
         )}
       </div>
 
-      {/* All Other Posts - Only on feeds page */}
+      {/* all feeds  */}
       {isFeedsPage && allPosts.length > 0 && (
-        <div>
-          <h3 className="text-xl font-bold text-gray-900 mb-6">
-            More Whispers
-          </h3>
-          <div className="grid gap-6 grid-cols-1 w-full sm:grid-cols-2 lg:grid-cols-3">
-            {allPosts.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
-          </div>
+        <div className="my-10">
+          <h3 className="text-xl font-bold text-gray-900 mb-6">Whispers</h3>
+
+          {allPosts.length === 0 ? (
+            <div className="flex flex-col items-center justify-center text-center py-16">
+              <h4 className="text-lg font-semibold text-gray-700">
+                No Whispers found
+              </h4>
+              <p className="text-gray-500 mt-1">
+                There are no whispers under the &quot;{selectedCategory}&quot;
+                category yet.
+              </p>
+            </div>
+          ) : (
+            <div className="grid gap-6 grid-cols-1 w-full sm:grid-cols-2 lg:grid-cols-3">
+              {allPosts.map((post) => (
+                <PostCard key={post.id} post={post} />
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>

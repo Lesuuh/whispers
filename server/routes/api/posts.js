@@ -14,12 +14,12 @@ router.get("/", getAllPosts);
 
 router.post("/", createPost);
 
+router.get("/trending", getTrendingPosts);
+
 router.get("/:id", getPost);
 
 router.post("/:id/comments", comments);
 
 router.post("/:id/share", incrementShare);
-
-router.post("/trending", getTrendingPosts);
 
 module.exports = router;

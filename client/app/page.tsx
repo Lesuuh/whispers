@@ -10,7 +10,6 @@ import PostForm from "./_components/modals/PostForm";
 export default function Home() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<string>(" ");
-  console.log(selectedCategory);
   return (
     <>
       <HeroSection setIsOpen={setIsOpen} />

@@ -25,8 +25,6 @@ const getAllPosts = async (req, res) => {
 
     const { data, error } = await query;
 
-    console.log(data);
-
     if (error) {
       return res.status(500).json({ message: error.message });
     }
@@ -114,7 +112,6 @@ const getPost = async (req, res) => {
 const comments = async (req, res) => {
   const id = req.params.id;
   const { comment } = req.body;
-  console.log(req.body);
 
   if (!comment) {
     res.status(400).json("Please type a comment");
@@ -143,7 +140,6 @@ const comments = async (req, res) => {
 
 const incrementShare = async (req, res) => {
   const { id } = req.params;
-  console.log("Increment share for post:", id);
 
   try {
     // Step 1: Get current share_count
@@ -178,15 +174,21 @@ const getTrendingPosts = async (req, res) => {
   try {
     const { data, error } = await supabase
       .from("posts")
-      .select("*")
+      .select("*, comments (*, created_at)")
       .order("share_count", { ascending: false })
-      .limit(5);
+      .limit(3);
 
-    if (error) throw error;
+    if (error) {
+      console.error("Supabase error:", error);
+      return res.status(400).json({ error: error.message });
+    }
 
-    res.status(200).json({ message: "Trending data got", data: data });
+    res.status(200).json({
+      message: "Trending posts fetched successfully",
+      trending: data || [],
+    });
   } catch (error) {
-    console.error("An Error occured", error);
+    console.error("An error occurred while fetching trending posts:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };

@@ -63,16 +63,11 @@ const Page = () => {
 
   // 🔹 Handle share
   const handleShare = async () => {
-    console.log(post?.id);
-    console.log(postId);
-
     const shareData = {
       title: post?.title,
       text: post?.content,
       url: `${window.location.origin}/posts/${postId}`,
     };
-
-    console.log(shareData);
 
     if (navigator.share) {
       try {
@@ -148,7 +143,7 @@ const Page = () => {
           <span className="hidden sm:inline text-gray-300">•</span>
           <div className="flex items-center gap-1.5">
             <Clock className="w-4 h-4" />
-            <span>~ 2 min read</span>
+            <span>2 min read</span>
           </div>
         </div>
 
