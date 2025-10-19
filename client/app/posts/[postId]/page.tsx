@@ -43,7 +43,7 @@ const Page = () => {
   const mutation = useMutation<CommentResponse, Error, NewComment>({
     mutationFn: addComment,
     onSuccess: () => {
-      queryClient.invalidateQueries();
+      queryClient.invalidateQueries({ queryKey: ["post", postId] });
     },
     onError: (error: Error) => {
       console.error("Error adding comment:", error.message);
@@ -63,29 +63,26 @@ const Page = () => {
 
   // 🔹 Handle share
   const handleShare = async () => {
+    if (typeof window === "undefined" || typeof navigator === "undefined")
+      return;
+
     const shareData = {
       title: post?.title,
       text: post?.content,
       url: `${window.location.origin}/posts/${postId}`,
     };
 
-    if (navigator.share) {
-      try {
-        await navigator.share(shareData);
-      } catch (error) {
-        console.error("Share failed", error);
-      }
-    } else {
-      navigator.clipboard.writeText(shareData.url);
-      alert("Whisper link copied");
-    }
-
     try {
-      await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/posts/${post?.id}/share`
-      );
-    } catch (err) {
-      console.error("Share count update failed:", err);
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(shareData.url);
+        alert("Whisper link copied");
+      }
+
+      await axios.post(`${base_url}/posts/${post?.id}/share`);
+    } catch (error) {
+      console.error("Share failed:", error);
     }
   };
 
@@ -110,11 +107,6 @@ const Page = () => {
       </div>
     );
 
-  // const formattedDate = new Date(post.createdAt).toLocaleString("en-US", {
-  //   dateStyle: "medium",
-  //   timeStyle: "short",
-  // });
-
   return (
     <section className="max-w-4xl mx-auto px-4 py-10">
       {/* Category */}
@@ -128,7 +120,7 @@ const Page = () => {
       </h1>
 
       {/* Meta Info */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-4">
+      <div className="flex w-full gap-4 mt-4">
         {/* Left side - Meta data */}
         <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-sm text-gray-500">
           <div className="flex items-center gap-1.5">
@@ -143,25 +135,34 @@ const Page = () => {
           <span className="hidden sm:inline text-gray-300">•</span>
           <div className="flex items-center gap-1.5">
             <Clock className="w-4 h-4" />
-            <span>2 min read</span>
+            <span>2 min</span>
           </div>
         </div>
 
-        {/* Right side - Share Button */}
+        {/* Right side - Share Button with count */}
         <button
           onClick={handleShare}
-          className="flex items-center justify-center gap-2 px-5 py-2.5 text-gray-700 rounded-lg hover:bg-purple-50 hover:text-purple-700 hover:border-purple-300 transition-all duration-300  w-full sm:w-auto"
+          className="flex items-center ml-auto justify-center gap-2 px-5 py-2.5 text-gray-700 rounded-lg hover:bg-purple-50 hover:text-purple-700 hover:border-purple-300 transition-all duration-300  cursor-pointer"
           aria-label="Share post"
         >
           <Share2 className="w-4 h-4" />
           <span className="text-sm font-medium">Share</span>
+          {post.share_count > 0 && (
+            <>
+              <span className="text-gray-300">•</span>
+              <span className="text-sm font-medium">{post.share_count}</span>
+            </>
+          )}
         </button>
       </div>
 
       <hr className="my-6 border-gray-200" />
 
       {/* Post Content */}
-      <div className="prose prose-gray max-w-none text-gray-700 leading-relaxed whitespace-pre-line">
+      <div
+        className="prose prose-gray max-w-none text-gray-700 leading-relaxed whitespace-pre-line"
+        suppressHydrationWarning
+      >
         <ReactMarkdown>{post.content}</ReactMarkdown>
       </div>
 
@@ -171,28 +172,16 @@ const Page = () => {
           <h2 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
             <MessageCircle className="w-5 h-5 text-purple-700" />
             Join the Discussion
+            <span className="text-sm font-normal text-gray-500">
+              ({post.comments.length})
+            </span>
           </h2>
-
-          {/* Engagement Stats */}
-          <div className="flex items-center gap-3 text-sm text-gray-500">
-            <span className="flex items-center gap-1">
-              <MessageCircle className="w-4 h-4" />
-              {post.comments.length}{" "}
-              {post.comments.length === 1 ? "comment" : "comments"}
-            </span>
-            <span className="text-gray-300">•</span>
-            <span className="flex items-center gap-1">
-              <Share2 className="w-4 h-4" />
-              {post.share_count || 0}{" "}
-              {post.share_count === 1 ? "share" : "shares"}
-            </span>
-          </div>
         </div>
 
         {/* Form */}
         <form
           onSubmit={handleCommentSubmit}
-          className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full"
+          className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full mb-8"
         >
           <textarea
             id="comment"
@@ -202,7 +191,7 @@ const Page = () => {
             placeholder="💭 Share your thoughts..."
             rows={3}
             className="flex-1 w-full py-3 rounded-xl text-sm bg-white border border-gray-200 px-4 text-gray-700 
-              focus:border-purple-600 focus:outline-none focus:ring-1 focus:ring-purple-600 transition-all duration-200 resize-none"
+              focus:border-purple-600 focus:outline-none focus:ring-0 focus:ring-purple-600 transition-all duration-200 resize-none"
           />
           <button
             type="submit"
@@ -253,7 +242,10 @@ const Page = () => {
                     {timeAgo(c.created_at)}
                   </span>
                 </div>
-                <div className="prose prose-gray max-w-none whitespace-pre-line text-gray-700 text-sm leading-relaxed">
+                <div
+                  className="prose prose-gray max-w-none whitespace-pre-line text-gray-700 text-sm leading-relaxed"
+                  suppressHydrationWarning
+                >
                   <ReactMarkdown>{c.comment}</ReactMarkdown>
                 </div>
               </div>
