@@ -174,4 +174,28 @@ const incrementShare = async (req, res) => {
   }
 };
 
-module.exports = { getAllPosts, createPost, getPost, comments, incrementShare };
+const getTrendingPosts = async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from("posts")
+      .select("*")
+      .order("share_count", { ascending: false })
+      .limit(5);
+
+    if (error) throw error;
+
+    res.status(200).json({ message: "Trending data got", data: data });
+  } catch (error) {
+    console.error("An Error occured", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+module.exports = {
+  getAllPosts,
+  createPost,
+  getPost,
+  comments,
+  incrementShare,
+  getTrendingPosts,
+};
