@@ -66,10 +66,16 @@ const Page = () => {
     if (typeof window === "undefined" || typeof navigator === "undefined")
       return;
 
+    const postText = post?.content
+      ? post.content.length > 100
+        ? post.content.substring(0, 100) + "..."
+        : post.content
+      : "";
+
     const shareData = {
-      title: post?.title,
-      text: post?.content,
-      url: `${window.location.origin}/posts/${postId}`,
+      title: post?.title || "Check this Whisper",
+      text: postText,
+      url: `${window.location.origin}/posts/${post?.id}`,
     };
 
     try {
