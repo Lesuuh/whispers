@@ -9,6 +9,9 @@ const {
 } = require("../../controllers/postController");
 
 const router = express.Router();
+const anonymousIdentity  = require("../../middlewares/anonIdentity");
+
+router.use(anonymousIdentity);
 
 router.get("/", getAllPosts);
 

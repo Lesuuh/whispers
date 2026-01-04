@@ -1,4 +1,5 @@
 const express = require("express");
+const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const corsOptions = require("./config/corsOptions");
 
@@ -8,6 +9,7 @@ require("dotenv").config();
 // middlewares
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use(cookieParser());
 
 // routes
 app.use("/", require("./routes/root"));
