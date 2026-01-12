@@ -50,11 +50,15 @@ const createPost = async (req, res) => {
     if (!title || !category || !content) {
       return res.status(400).json({ message: "All fields are required" });
     }
+
+    const anonId = req.user.id;
+
     const newPost = {
       title: title,
       category: category,
       content: content,
       author: getRandomName(),
+      anon_id: anonId,
     };
 
     const { data, error } = await supabase

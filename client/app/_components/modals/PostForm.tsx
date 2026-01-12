@@ -1,6 +1,6 @@
+import api from "@/app/api";
 import { ModalProps } from "@/app/utils/types";
 import { QueryClient } from "@tanstack/react-query";
-import axios from "axios";
 import { AlertCircle, CheckCircle, X } from "lucide-react";
 import React, { useState } from "react";
 
@@ -44,8 +44,7 @@ const PostForm: React.FC<ModalProps> = ({ setIsOpen }) => {
     }
 
     try {
-      const base_url = process.env.NEXT_PUBLIC_API_URL;
-      const response = await axios.post(`${base_url}/posts`, formData);
+      const response = await api.post(`/posts`, formData);
 
       setMessage({
         type: "success",
