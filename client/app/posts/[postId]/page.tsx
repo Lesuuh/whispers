@@ -2,19 +2,18 @@
 
 import { useState, FormEvent } from "react";
 import { useParams } from "next/navigation";
-import axios from "axios";
 import { Calendar, User, Clock, MessageCircle, Share2 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { timeAgo } from "@/app/utils/date";
 import { CommentResponse, NewComment, Post } from "@/app/utils/types";
+import api from "@/app/api";
 
 // ================== Component ==================
 const Page = () => {
   const { postId } = useParams<{ postId: string }>();
   const [comment, setComment] = useState("");
   const queryClient = useQueryClient();
-  const base_url = process.env.NEXT_PUBLIC_API_URL;
 
   // 🔹 Fetch post
   const {
@@ -24,7 +23,7 @@ const Page = () => {
   } = useQuery<Post>({
     queryKey: ["post", postId],
     queryFn: async () => {
-      const res = await axios.get<Post>(`${base_url}/posts/${postId}`);
+      const res = await api.get<Post>(`/posts/${postId}`);
       return res.data;
     },
   });
@@ -32,10 +31,7 @@ const Page = () => {
   const addComment = async (
     newComment: NewComment
   ): Promise<CommentResponse> => {
-    const res = await axios.post(
-      `${base_url}/posts/${postId}/comments`,
-      newComment
-    );
+    const res = await api.post(`/posts/${postId}/comments`, newComment);
     return res.data;
   };
 
@@ -86,7 +82,7 @@ const Page = () => {
         alert("Whisper link copied");
       }
 
-      await axios.post(`${base_url}/posts/${post?.id}/share`);
+      await api.post(`/posts/${post?.id}/share`);
     } catch (error) {
       console.error("Share failed:", error);
     }
