@@ -10,6 +10,9 @@ const anonymousIdentityMiddleWare = async (req, res, next) => {
     let rawToken = req.cookies.anon_token;
     let isNew = false;
 
+    console.log("raw token", rawToken);
+    console.log(req);
+
     // generate the token if missing
     if (!rawToken) {
       rawToken = crypto.randomBytes(32).toString("hex");
@@ -22,6 +25,8 @@ const anonymousIdentityMiddleWare = async (req, res, next) => {
       .update(rawToken)
       .digest("hex");
 
+    console.log(anonHash);
+    console.log(isNew);
     //   then look in the database for the hash and if not found insert it
     const { data: identity } = await supabase
       .from("users")
@@ -48,7 +53,7 @@ const anonymousIdentityMiddleWare = async (req, res, next) => {
 
         const { data: rotatedIdentity } = await supabase
           .from("users")
-          .insert([{ anonHash: newHash }])
+          .insert([{ anon_hash: newHash }])
           .select()
           .single();
 
@@ -81,8 +86,8 @@ const anonymousIdentityMiddleWare = async (req, res, next) => {
     if (isNew) {
       res.cookie("anon_token", rawToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "Lax",
+        secure: true,
+        sameSite: "None",
         maxAge: 30 * 24 * 60 * 60 * 1000,
       });
     }
