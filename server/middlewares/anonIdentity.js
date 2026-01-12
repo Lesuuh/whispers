@@ -1,3 +1,24 @@
+/**
+ * anonymousIdentityMiddleWare
+ *
+ * This Express middleware ensures that every user (even anonymous ones) has a unique, persistent identity.
+ *
+ * Workflow:
+ * 1. Checks for an 'anon_token' cookie in the request. If missing, generates a new random token.
+ * 2. Hashes the token using HMAC-SHA256 and a secret from the environment.
+ * 3. Looks up the hash in the 'users' table in the database:
+ *    - If found, checks if the identity is expired (older than 30 days). If expired, rotates the identity.
+ *    - If not found, creates a new user with the hash.
+ * 4. Attaches the user's id to req.user for downstream use.
+ * 5. Sets the 'anon_token' cookie if a new token was generated or identity was rotated.
+ * 6. Handles CORS preflight requests by skipping logic for OPTIONS method.
+ * 7. Handles errors gracefully and logs them.
+ *
+ * Security:
+ * - The cookie is set as httpOnly, secure = true, sameSite=None, and lasts for 30 days.
+ * - All errors are logged and a 500 error is returned if identity creation fails.
+ */
+
 const crypto = require("crypto");
 const supabase = require("../supabase");
 const secret = process.env.ANON_SECRET;
@@ -9,9 +30,6 @@ const anonymousIdentityMiddleWare = async (req, res, next) => {
     // fetch the raw token from the cookie store
     let rawToken = req.cookies.anon_token;
     let isNew = false;
-
-    console.log("raw token", rawToken);
-    console.log(req);
 
     // generate the token if missing
     if (!rawToken) {
