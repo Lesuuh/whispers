@@ -1,8 +1,14 @@
-const name = require("../models/randomNames.json");
+// const name = require("../models/randomNames.json");
+
+// function getRandomName() {
+//   const index = Math.floor(Math.random() * name.length);
+//   return name[index];
+// }
 
 function getRandomName() {
-  const index = Math.floor(Math.random() * name.length);
-  return name[index];
+  return {
+    username: faker.internet.username(),
+  };
 }
 
 module.exports = getRandomName;
