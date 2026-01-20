@@ -26,7 +26,6 @@ const secret = process.env.ANON_SECRET;
 const anonymousIdentityMiddleWare = async (req, res, next) => {
   if (req.method === "OPTIONS") return next();
   try {
-    console.log("anonymousIdentity middleware called");
     // fetch the raw token from the cookie store
     let rawToken = req.cookies.anon_token;
     let isNew = false;
@@ -43,8 +42,6 @@ const anonymousIdentityMiddleWare = async (req, res, next) => {
       .update(rawToken)
       .digest("hex");
 
-    console.log(anonHash);
-    console.log(isNew);
     //   then look in the database for the hash and if not found insert it
     const { data: identity } = await supabase
       .from("users")

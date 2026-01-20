@@ -3,6 +3,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const corsOptions = require("./config/corsOptions");
 
+
 const app = express();
 require("dotenv").config();
 
@@ -10,6 +11,8 @@ require("dotenv").config();
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
+
+
 
 // routes
 app.use("/", require("./routes/root"));

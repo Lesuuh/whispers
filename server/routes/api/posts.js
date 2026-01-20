@@ -10,6 +10,10 @@ const {
 
 const router = express.Router();
 const anonymousIdentity = require("../../middlewares/anonIdentity");
+const { simpleRateLimiter } = require("../../middlewares/rateLimitMiddleware");
+
+// const globalLimiter = simpleRateLimiter(50, 60 * 1000);
+const strictLimiter = simpleRateLimiter(5, 60 * 60 * 1000);
 
 router.get("/", getAllPosts);
 
@@ -23,8 +27,8 @@ router.get("/:id", getPost);
 
 // router.post("/:id/share", incrementShare);
 
-router.post("/", anonymousIdentity, createPost);
-router.post("/:id/comments", anonymousIdentity, comments);
-router.post("/:id/share", anonymousIdentity, incrementShare);
+router.post("/", anonymousIdentity, strictLimiter, createPost);
+router.post("/:id/comments", anonymousIdentity, strictLimiter, comments);
+router.post("/:id/share", anonymousIdentity, strictLimiter, incrementShare);
 
 module.exports = router;
