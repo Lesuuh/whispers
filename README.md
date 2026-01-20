@@ -1,5 +1,3 @@
-
-
 # 🗣️ Whispers
 
 ![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=nextdotjs)
@@ -19,12 +17,14 @@ Built with **Next.js 15** (frontend), **Express.js** (backend), and **Supabase P
 
 ## 🚀 Features
 
-* ✍️ Post thoughts anonymously
-* 🧭 Browse posts by categories
-* 💬 Comment without revealing your identity
-* 📱 Fully responsive for mobile and desktop
-* ⚡ Smooth UI transitions & gradients
-* 📦 PWA-ready (installable on devices)
+- ✍️ Post thoughts anonymously
+- 🧭 Browse posts by categories
+- 💬 Comment without revealing your identity
+- 📱 Fully responsive for mobile and desktop
+- ⚡ Smooth UI transitions & gradients
+- 📦 PWA-ready (installable on devices)
+- 🕵️ Anonymous identity system (no accounts needed, but each user gets a persistent anonymous identity)
+- 🛡️ Rate limiting to prevent spam and abuse
 
 ---
 
@@ -32,21 +32,21 @@ Built with **Next.js 15** (frontend), **Express.js** (backend), and **Supabase P
 
 ### 🖥️ Frontend
 
-* Next.js 15
-* React
-* Tailwind CSS
-* React Markdown
-* Axios
-* Lucide React
+- Next.js 15
+- React
+- Tailwind CSS
+- React Markdown
+- Axios
+- Lucide React
 
 ### ⚙️ Backend
 
-* Express.js
-* Node.js
+- Express.js
+- Node.js
 
 ### 🗄️ Database
 
-* Supabase (PostgreSQL)
+- Supabase (PostgreSQL)
 
 ---
 
@@ -127,9 +127,9 @@ whispers/
 
 ## 📦 Deployment
 
-* **Frontend:** Vercel
-* **Backend:** Render
-* **Database:** Supabase
+- **Frontend:** Vercel
+- **Backend:** Render
+- **Database:** Supabase
 
 Make sure to add your environment variables to your deployment platform settings.
 
@@ -138,8 +138,9 @@ Make sure to add your environment variables to your deployment platform settings
 ## 🧠 Future Improvements
 
 <!-- * 🔐 User profiles (optional anonymity) -->
-* ❤️ Like / react to posts
-* 🔔 Notifications for new comments
+
+- ❤️ Like / react to posts
+- 🔔 Notifications for new comments
 <!-- * 📊 Analytics for admins -->
 
 ---
@@ -147,18 +148,17 @@ Make sure to add your environment variables to your deployment platform settings
 ## 👨‍💻 Author
 
 **Lesuuh** — Frontend Developer
-*"Air it out. Freely. Anonymously."*
+_"Air it out. Freely. Anonymously."_
 
 ---
 
 ## 🔗 Links
 
-* 🌐 **Live Demo:** [https://whispers-gold.vercel.app](https://whispers-gold.vercel.app)
-* 🧰 **GitHub Repo:** [https://github.com/lesuuh/whispers](https://github.com/lesuuh/whispers)
+- 🌐 **Live Demo:** [https://whispers-gold.vercel.app](https://whispers-gold.vercel.app)
+- 🧰 **GitHub Repo:** [https://github.com/lesuuh/whispers](https://github.com/lesuuh/whispers)
 
 ---
 
 ## 🪪 License
 
 This project is open-source under the **MIT License**.
-
