@@ -5,6 +5,8 @@
 //   return name[index];
 // }
 
+const { faker } = require("@faker-js/faker");
+
 function getRandomName() {
   return {
     username: faker.internet.username(),

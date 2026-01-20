@@ -2,7 +2,7 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const corsOptions = require("./config/corsOptions");
-const { faker } = require("@faker-js/faker");
+
 
 const app = express();
 require("dotenv").config();
