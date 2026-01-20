@@ -1,6 +1,7 @@
 import api from "@/app/api";
 import { ModalProps } from "@/app/utils/types";
 import { QueryClient } from "@tanstack/react-query";
+import axios from "axios";
 import { AlertCircle, CheckCircle, X } from "lucide-react";
 import React, { useState } from "react";
 
@@ -22,14 +23,14 @@ const PostForm: React.FC<ModalProps> = ({ setIsOpen }) => {
   });
   const [showCustomCategory, setShowCustomCategory] = useState(false);
   const [message, setMessage] = useState<{
-    type: "error" | "success" | null;
+    type: "error" | "success" | "warning" | null | string;
     text: string;
   }>({ type: null, text: "" });
 
   const queryClient = new QueryClient();
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -55,10 +56,22 @@ const PostForm: React.FC<ModalProps> = ({ setIsOpen }) => {
       setFormData({ title: "", category: "", content: "" });
       queryClient.invalidateQueries({ queryKey: ["posts"] });
     } catch (error) {
-      console.error(error);
+      let messageText = "Something went wrong.";
+      let messageType = "error";
+
+      if (axios.isAxiosError(error)) {
+        // Now TypeScript/Node knows 'error' has a 'response' property
+        if (error.response?.status === 429) {
+          messageType = "warning";
+          // This pulls the message you wrote in your middleware: res.json({ error: "..." })
+          messageText =
+            error.response.data.error || "Too many requests. Please wait.";
+        }
+      }
+
       setMessage({
-        type: "error",
-        text: "Something went wrong while posting. Please check your connection and try again.",
+        type: messageType,
+        text: messageText,
       });
     } finally {
       // Auto-clear message after 5 seconds
