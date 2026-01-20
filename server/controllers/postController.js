@@ -14,7 +14,7 @@ const getAllPosts = async (req, res) => {
         *,
         created_at
       )
-    `
+    `,
       )
       .order("created_at", { ascending: false })
       .order("created_at", { referencedTable: "comments", ascending: false });
@@ -31,7 +31,7 @@ const getAllPosts = async (req, res) => {
     const sortedData = data.map((post) => ({
       ...post,
       comments: post.comments?.sort(
-        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+        (a, b) => new Date(b.created_at) - new Date(a.created_at),
       ),
     }));
     // Return posts
@@ -57,7 +57,7 @@ const createPost = async (req, res) => {
       title: title,
       category: category,
       content: content,
-      author: getRandomName(),
+      author: getRandomName().username,
       anon_id: anonId,
     };
 
@@ -96,7 +96,7 @@ const getPost = async (req, res) => {
           comment,
           created_at
         )
-      `
+      `,
       )
       .eq("id", id)
       .single();
