@@ -1,26 +1,18 @@
 "use client";
-
 import { useState, FormEvent } from "react";
 import { useParams } from "next/navigation";
-import { Calendar, User, Clock, MessageCircle, Share2 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { timeAgo } from "@/app/utils/date";
 import { CommentResponse, NewComment, Post } from "@/app/utils/types";
 import api from "@/app/api";
 
-// ================== Component ==================
 const Page = () => {
   const { postId } = useParams<{ postId: string }>();
   const [comment, setComment] = useState("");
   const queryClient = useQueryClient();
 
-  // 🔹 Fetch post
-  const {
-    data: post,
-    isLoading: loadingPost,
-    isError: errorPost,
-  } = useQuery<Post>({
+  const { data: post, isLoading: loadingPost } = useQuery<Post>({
     queryKey: ["post", postId],
     queryFn: async () => {
       const res = await api.get<Post>(`/posts/${postId}`);
@@ -28,234 +20,112 @@ const Page = () => {
     },
   });
 
-  const addComment = async (
-    newComment: NewComment
-  ): Promise<CommentResponse> => {
-    const res = await api.post(`/posts/${postId}/comments`, newComment);
-    return res.data;
-  };
-
-  // 🔹 Post comment
+  console.log(post);
   const mutation = useMutation<CommentResponse, Error, NewComment>({
-    mutationFn: addComment,
+    mutationFn: async (newComment) => {
+      const res = await api.post(`/posts/${postId}/comments`, newComment);
+      return res.data;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["post", postId] });
-    },
-    onError: (error: Error) => {
-      console.error("Error adding comment:", error.message);
+      setComment("");
     },
   });
 
-  // 🔹 Handle form submit
   const handleCommentSubmit = (e: FormEvent) => {
     e.preventDefault();
-
     if (!comment.trim()) return;
-
     mutation.mutate({ comment });
-
-    setComment("");
-  };
-
-  // 🔹 Handle share
-  const handleShare = async () => {
-    if (typeof window === "undefined" || typeof navigator === "undefined")
-      return;
-
-    const postText = post?.content
-      ? post.content.length > 100
-        ? post.content.substring(0, 100) + "..."
-        : post.content
-      : "";
-
-    const shareData = {
-      title: post?.title || "Check this Whisper",
-      text: postText,
-      url: `${window.location.origin}/posts/${post?.id}`,
-    };
-
-    try {
-      if (navigator.share) {
-        await navigator.share(shareData);
-      } else {
-        await navigator.clipboard.writeText(shareData.url);
-        alert("Whisper link copied");
-      }
-
-      await api.post(`/posts/${post?.id}/share`);
-    } catch (error) {
-      console.error("Share failed:", error);
-    }
   };
 
   if (loadingPost)
     return (
-      <div className="flex items-center justify-center h-screen text-gray-500">
-        Loading Whisper......
-      </div>
-    );
-
-  if (errorPost)
-    return (
-      <div className="flex items-center justify-center h-screen text-red-500">
-        Failed to load post 😔
-      </div>
-    );
-
-  if (!post)
-    return (
-      <div className="flex items-center justify-center h-screen text-gray-500">
-        Post not found
+      <div className="flex h-screen items-center justify-center font-mono text-[10px] uppercase tracking-[0.5em] text-gray-300">
+        Loading...
       </div>
     );
 
   return (
-    <section className="max-w-4xl mx-auto px-4 py-10">
-      {/* Category */}
-      <span className="inline-block px-3 py-1.5 rounded-full bg-purple-50 text-purple-700 text-xs font-semibold uppercase tracking-wide">
-        {post.category}
-      </span>
-
-      {/* Title */}
-      <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mt-4 leading-snug">
-        {post.title}
-      </h1>
-
-      {/* Meta Info */}
-      <div className="flex w-full gap-4 mt-4">
-        {/* Left side - Meta data */}
-        <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-sm text-gray-500">
-          <div className="flex items-center gap-1.5">
-            <User className="w-4 h-4" />
-            <span>{post.author || "Anonymous"}</span>
+    <main className="bg-white min-h-screen pt-32 pb-32">
+      <div className="mx-auto max-w-6xl px-6">
+        {/* Header */}
+        <header className="mb-20">
+          <h1 className="font-serif text-5xl md:text-7xl leading-tight text-black font-light mb-6">
+            {post?.title}
+          </h1>
+          <div className="font-mono text-[9px] uppercase tracking-[0.3em] text-gray-300">
+            {post?.category} • By {post?.author} •{" "}
+            {timeAgo(post?.created_at || "")}
           </div>
-          <span className="hidden sm:inline text-gray-300">•</span>
-          <div className="flex items-center gap-1.5">
-            <Calendar className="w-4 h-4" />
-            <span>{timeAgo(post.created_at)}</span>
+        </header>
+
+        {/* Content Body */}
+        <article className="prose prose-neutral max-w-none mb-40">
+          <div className="font-serif text-xl md:text-2xl leading-[1.8] text-gray-800">
+            <ReactMarkdown>{post?.content || ""}</ReactMarkdown>
           </div>
-          <span className="hidden sm:inline text-gray-300">•</span>
-          <div className="flex items-center gap-1.5">
-            <Clock className="w-4 h-4" />
-            <span>2 min</span>
-          </div>
-        </div>
+        </article>
 
-        {/* Right side - Share Button with count */}
-        <button
-          onClick={handleShare}
-          className="flex items-center ml-auto justify-center gap-2 px-5 py-2.5 text-gray-700 rounded-lg hover:bg-purple-50 hover:text-purple-700 hover:border-purple-300 transition-all duration-300  cursor-pointer"
-          aria-label="Share post"
-        >
-          <Share2 className="w-4 h-4" />
-          <span className="text-sm font-medium">Share</span>
-          {post.share_count > 0 && (
-            <>
-              <span className="text-gray-300">•</span>
-              <span className="text-sm font-medium">{post.share_count}</span>
-            </>
-          )}
-        </button>
-      </div>
+        {/* The Sleek Echo Section */}
 
-      <hr className="my-6 border-gray-200" />
-
-      {/* Post Content */}
-      <div
-        className="prose prose-gray max-w-none text-gray-700 leading-relaxed whitespace-pre-line"
-        suppressHydrationWarning
-      >
-        <ReactMarkdown>{post.content}</ReactMarkdown>
-      </div>
-
-      {/* Comments */}
-      <div className="mt-12 border-t border-gray-200 pt-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-            <MessageCircle className="w-5 h-5 text-purple-700" />
-            Join the Discussion
-            <span className="text-sm font-normal text-gray-500">
-              ({post.comments.length})
+        <section className="mt-32 pt-16 border-t border-gray-50">
+          <div className="flex items-center justify-between mb-16">
+            <h2 className="font-serif text-2xl italic text-gray-900">Echoes</h2>
+            <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-gray-300">
+              {post?.comments.length} Signals
             </span>
-          </h2>
-        </div>
+          </div>
 
-        {/* Form */}
-        <form
-          onSubmit={handleCommentSubmit}
-          className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full mb-8"
-        >
-          <textarea
-            id="comment"
-            name="comment"
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            placeholder="💭 Share your thoughts..."
-            rows={3}
-            className="flex-1 w-full py-3 rounded-xl text-sm bg-white border border-gray-200 px-4 text-gray-700 
-              focus:border-purple-600 focus:outline-none focus:ring-0 focus:ring-purple-600 transition-all duration-200 resize-none"
-          />
-          <button
-            type="submit"
-            disabled={mutation.isPending}
-            className="w-full sm:w-auto bg-gray-900 text-white px-6 py-3 rounded-xl font-medium 
-              hover:bg-purple-700 hover:scale-105 transition-all duration-200 disabled:opacity-60"
-          >
-            {mutation.isPending ? "Posting..." : "Comment"}
-          </button>
-        </form>
-
-        {/* Comments List */}
-        <div className="mt-8 space-y-6">
-          {loadingPost ? (
-            // Skeleton loading
-            <div className="space-y-4">
-              {[1, 2, 3].map((n) => (
-                <div
-                  key={n}
-                  className="border border-gray-100 bg-gray-50 rounded-2xl p-4 animate-pulse"
-                >
-                  <div className="flex justify-between mb-2">
-                    <div className="h-4 w-24 bg-gray-200 rounded"></div>
-                    <div className="h-3 w-16 bg-gray-200 rounded"></div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="h-3 w-full bg-gray-200 rounded"></div>
-                    <div className="h-3 w-4/5 bg-gray-200 rounded"></div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : post.comments.length === 0 ? (
-            <p className="text-gray-500 text-sm italic text-center">
-              No comments yet — be the first to share your thoughts 💭
-            </p>
-          ) : (
-            post.comments.map((c) => (
-              <div
-                key={c.id}
-                className="border border-gray-100 bg-gray-50 rounded-2xl p-4 hover:shadow-sm transition"
+          {/* Input: Replaced with a subtle inset field for contrast */}
+          <form onSubmit={handleCommentSubmit} className="mb-24">
+            <textarea
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              placeholder="Add to the void..."
+              className="w-full bg-gray-50/50 rounded-2xl p-6 font-serif text-lg outline-none focus:bg-white focus:ring-1 focus:ring-purple-100 transition-all resize-none placeholder:text-gray-300"
+              rows={2}
+            />
+            <div className="flex justify-end mt-4">
+              <button
+                type="submit"
+                disabled={mutation.isPending}
+                className="font-mono text-[10px] uppercase tracking-[0.4em] text-gray-400 hover:text-purple-600 transition-all"
               >
-                <div className="flex justify-between items-center mb-2">
-                  <p className="text-sm font-semibold text-gray-800">
-                    {c.author || "Anonymous"}
-                  </p>
-                  <span className="text-xs text-gray-500">
-                    {timeAgo(c.created_at)}
-                  </span>
-                </div>
-                <div
-                  className="prose prose-gray max-w-none whitespace-pre-line text-gray-700 text-sm leading-relaxed"
-                  suppressHydrationWarning
-                >
+                {mutation.isPending ? "Sending..." : "Post Whisper →"}
+              </button>
+            </div>
+          </form>
+
+          {/* Comments List: Subtle Left-Accent for Contrast */}
+          <div className="space-y-12">
+            {post?.comments.map((c) => (
+              <div key={c.id} className="relative pl-8 group">
+                {/* The "Anchor Line" - very faint but creates contrast */}
+                <div className="absolute left-0 top-1 bottom-1 w-[1px] bg-gray-100 group-hover:bg-purple-200 transition-colors" />
+
+                <div className="font-serif text-lg text-gray-700 leading-relaxed mb-3">
                   <ReactMarkdown>{c.comment}</ReactMarkdown>
                 </div>
+
+                <div className="flex items-center gap-3 font-mono text-[9px] uppercase tracking-widest">
+                  <span className="text-gray-900 font-bold">
+                    {c.author || "Anonymous"}
+                  </span>
+                  <span className="text-gray-300">•</span>
+                  <span className="text-gray-300">{timeAgo(c.created_at)}</span>
+                </div>
               </div>
-            ))
-          )}
-        </div>
+            ))}
+
+            {post?.comments.length === 0 && (
+              <p className="text-center font-serif italic text-gray-300 py-10">
+                Silence. Add the first echo.
+              </p>
+            )}
+          </div>
+        </section>
       </div>
-    </section>
+    </main>
   );
 };
 

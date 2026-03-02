@@ -1,5 +1,4 @@
 "use client";
-
 import axios from "axios";
 import { PostCard } from "../card/PostCard";
 import { useQuery } from "@tanstack/react-query";
@@ -9,82 +8,65 @@ import { usePathname } from "next/navigation";
 const FeedsSection = ({ selectedCategory }: { selectedCategory: string }) => {
   const pathname = usePathname();
   const isFeedsPage = pathname === "/feeds";
-  const fetchPosts = async () => {
-    const base_url = process.env.NEXT_PUBLIC_API_URL;
-    const res = await axios.get(
-      `${base_url}/posts?category=${selectedCategory}`
-    );
-    return res.data;
-  };
+  const base_url = process.env.NEXT_PUBLIC_API_URL;
+
   const { data: posts = [], isLoading } = useQuery<Post[]>({
-    queryKey: ["posts"],
-    queryFn: fetchPosts,
+    // Added selectedCategory to queryKey so it refetches on click
+    queryKey: ["posts", selectedCategory], 
+    queryFn: async () => {
+      const res = await axios.get(`${base_url}/posts?category=${selectedCategory}`);
+      return res.data;
+    },
   });
-
-  const filteredPosts =
-    selectedCategory !== " "
-      ? posts.filter((post) => post.category === selectedCategory)
-      : posts;
-
-  const latestPosts = filteredPosts.slice(0, 6);
-  const allPosts = filteredPosts.slice(6);
 
   if (isLoading) {
     return (
-      <div className="text-center py-10 text-gray-500">Loading whispers...</div>
+      <div className="flex min-h-[400px] items-center justify-center">
+        <p className="font-mono text-xs uppercase tracking-[0.5em] text-gray-400 animate-pulse">
+          Intercepting_Signals...
+        </p>
+      </div>
+    );
+  }
+
+  // Visual layout for "No Posts"
+  if (posts.length === 0) {
+    return (
+      <div className="border-2 border-dashed border-gray-200 py-32 text-center">
+        <h4 className="font-serif text-3xl italic text-gray-300">The void is silent.</h4>
+        <p className="mt-4 font-mono text-[10px] uppercase tracking-widest text-gray-400">
+          No whispers found in {selectedCategory || "All"}
+        </p>
+      </div>
     );
   }
 
   return (
-    <div>
-      <div>
-        <h3 className="text-xl font-bold text-gray-900 mb-6">
-          Latest Whispers
-        </h3>
-
-        {latestPosts.length === 0 ? (
-          <div className="flex flex-col items-center justify-center text-center py-16">
-            <h4 className="text-lg font-semibold text-gray-700">
-              No Whispers found
-            </h4>
-            <p className="text-gray-500 mt-1">
-              There are no whispers under the &quot;{selectedCategory}&quot;
-              category yet.
-            </p>
-          </div>
-        ) : (
-          <div className="grid gap-6 grid-cols-1 w-full sm:grid-cols-2 lg:grid-cols-3">
-            {latestPosts.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* all feeds  */}
-      {isFeedsPage && allPosts.length > 0 && (
-        <div className="my-10">
-          <h3 className="text-xl font-bold text-gray-900 mb-6">Whispers</h3>
-
-          {allPosts.length === 0 ? (
-            <div className="flex flex-col items-center justify-center text-center py-16">
-              <h4 className="text-lg font-semibold text-gray-700">
-                No Whispers found
-              </h4>
-              <p className="text-gray-500 mt-1">
-                There are no whispers under the &quot;{selectedCategory}&quot;
-                category yet.
-              </p>
-            </div>
-          ) : (
-            <div className="grid gap-6 grid-cols-1 w-full sm:grid-cols-2 lg:grid-cols-3">
-              {allPosts.map((post) => (
-                <PostCard key={post.id} post={post} />
-              ))}
-            </div>
-          )}
+    <div className="space-y-20">
+      {/* 01. Primary Feed */}
+      <section>
+        <div className="mb-8 flex items-end justify-between border-b border-black pb-2">
+          <h3 className="font-serif text-2xl italic tracking-tight text-black">
+            Latest Arrivals
+          </h3>
+          <span className="font-mono text-[10px] uppercase tracking-widest text-gray-400">
+            {posts.length} Messages
+          </span>
         </div>
-      )}
+
+        {/* Using 'gap-px bg-black' on the container + 'bg-white' on cards 
+            creates beautiful 1px divider lines between posts automatically.
+        */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-black border border-black overflow-hidden">
+          {posts.map((post) => (
+            <div key={post.id} className="bg-white hover:bg-gray-50 transition-colors">
+              <PostCard post={post} />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Optional: Secondary "Archived" section could go here */}
     </div>
   );
 };

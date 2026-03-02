@@ -25,9 +25,9 @@ body {
   background: var(--background);
   color: var(--foreground);
   /* font-family: Arial, Helvetica, sans-serif; */
-  max-width: 1400px;
+  /* max-width: 1400px; */
   margin: 0 auto; /* centers it */
-  padding: 0 1rem; /* ensures breathing space */
+  /* padding: 0 1rem; ensures breathing space */
 }
 
 /* Assign the fonts */
@@ -143,7 +143,7 @@ body {
 }
 
 /* Apply the animation */
-.hero-section {
+/* .hero-section {
   min-height: 80vh;
   display: flex;
   align-items: center;
@@ -151,9 +151,9 @@ body {
   animation: gradient_fade 45s ease-in-out infinite;
   background-size: 400% 400%;
   transition: background 2s ease;
-}
+} */
 
-.modal {
+/* .modal {
   animation: gradient_fade 45s ease-in-out infinite;
   transition: background 2s ease;
-}
+} */

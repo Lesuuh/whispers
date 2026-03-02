@@ -3,104 +3,91 @@ import axios from "axios";
 import { PostCard } from "../card/PostCard";
 import { useQuery } from "@tanstack/react-query";
 import { Post } from "@/app/utils/types";
-import { usePathname } from "next/navigation";
 
 const FeedsSection = ({ selectedCategory }: { selectedCategory: string }) => {
-  const pathname = usePathname();
-  const isFeedsPage = pathname === "/feeds";
   const base_url = process.env.NEXT_PUBLIC_API_URL;
-
-  const fetchPosts = async () => {
-    const res = await axios.get(
-      `${base_url}/posts?category=${selectedCategory}`
-    );
-    return res.data;
-  };
-
-  const fetchTrendingPosts = async () => {
-    const res = await axios.get(`${base_url}/posts/trending`);
-    return res.data.trending;
-  };
-
-  // Fix: Add selectedCategory to queryKey so it refetches on category change
-  const { data: posts = [], isLoading } = useQuery<Post[]>({
-    queryKey: ["posts", selectedCategory],
-    queryFn: fetchPosts,
-  });
 
   const { data: trending = [], isLoading: trendingLoading } = useQuery<Post[]>({
     queryKey: ["trending"],
-    queryFn: fetchTrendingPosts,
+    queryFn: async () => {
+      const res = await axios.get(`${base_url}/posts/trending`);
+      return Array.isArray(res.data) ? res.data : res.data.trending || [];
+    },
   });
 
-  // Filter posts based on category (though your API already does this)
-  const filteredPosts =
-    selectedCategory !== " "
-      ? posts.filter((post) => post.category === selectedCategory)
-      : posts;
+  const { data: posts = [], isLoading } = useQuery<Post[]>({
+    queryKey: ["posts", selectedCategory],
+    queryFn: async () => {
+      const res = await axios.get(
+        `${base_url}/posts?category=${selectedCategory}`,
+      );
+      return res.data;
+    },
+  });
 
-  const latestPosts = filteredPosts.slice(0, 6);
-  const allPosts = filteredPosts.slice(6);
+  const trendingIds = new Set(trending.map((p) => p.id));
+  const uniqueLatestPosts = posts.filter((post) => !trendingIds.has(post.id));
 
   if (isLoading || trendingLoading) {
     return (
-      <div className="text-center py-10 text-gray-500">Loading whispers...</div>
+      <div className="flex min-h-[400px] items-center justify-center font-mono text-[10px] uppercase tracking-[0.5em] text-gray-400">
+        <span className="animate-pulse italic">Loading Whispers...</span>
+      </div>
     );
   }
 
   return (
-    <div className="space-y-10">
-      {/* Trending Section - Only show if we have trending posts */}
+    <div className="mx-auto max-w-[1400px] space-y-32 py-12">
+      {/* 01. Trending Section - High Visual Contrast */}
       {trending.length > 0 && (
-        <div>
-          <h3 className="text-xl font-bold text-gray-900 mb-6">
-            🔥 Trending Whispers
-          </h3>
-          <div className="grid gap-6 grid-cols-1 w-full sm:grid-cols-2 lg:grid-cols-3">
+        <section className="animate-in fade-in slide-in-from-bottom-8 duration-1000">
+          <div className="mb-12 px-2">
+            <h3 className="font-serif text-4xl italic text-black">
+              Top Echoes
+            </h3>
+            <p className="font-mono text-[9px] uppercase tracking-[0.4em] text-gray-400 mt-2">
+              High_Intensity_Signals ({trending.length})
+            </p>
+          </div>
+
+          {/* Clean grid with wide gaps instead of lines */}
+          <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3">
             {trending.map((post) => (
               <PostCard key={post.id} post={post} />
             ))}
           </div>
-        </div>
+        </section>
       )}
 
-      {/* Latest Posts Section */}
-      <div>
-        <h3 className="text-xl font-bold text-gray-900 mb-6">
-          Latest Whispers
-        </h3>
-        {latestPosts.length === 0 ? (
-          <div className="flex flex-col items-center justify-center text-center py-16">
-            <h4 className="text-lg font-semibold text-gray-700">
-              No Whispers found
-            </h4>
-            <p className="text-gray-500 mt-1">
-              There are no whispers under the &quot;{selectedCategory}&quot;
-              category yet.
+      {/* 02. Latest Posts Section - Simple & Minimal */}
+      <section>
+        <div className="mb-12 px-2">
+          <h3 className="font-serif text-4xl italic text-black">
+            {selectedCategory.trim() === ""
+              ? "Recent Whispers"
+              : `In ${selectedCategory}`}
+          </h3>
+          <p className="font-mono text-[9px] uppercase tracking-[0.4em] text-gray-400 mt-2">
+            Live_Signal_Stream
+          </p>
+        </div>
+
+        {uniqueLatestPosts.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-32">
+            <div className="h-px w-12 bg-gray-200 mb-6" />
+            <p className="font-serif italic text-gray-400 text-xl">
+              The void is silent.
             </p>
           </div>
         ) : (
-          <div className="grid gap-6 grid-cols-1 w-full sm:grid-cols-2 lg:grid-cols-3">
-            {latestPosts.map((post) => (
+          /* FIX: Removed 'bg-black' and 'gap-px'. Switched to a standard clean grid. */
+          <div className="grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
+            {uniqueLatestPosts.map((post) => (
               <PostCard key={post.id} post={post} />
             ))}
           </div>
         )}
-      </div>
-
-      {/* All Other Posts - Only on feeds page */}
-      {isFeedsPage && allPosts.length > 0 && (
-        <div>
-          <h3 className="text-xl font-bold text-gray-900 mb-6">
-            More Whispers
-          </h3>
-          <div className="grid gap-6 grid-cols-1 w-full sm:grid-cols-2 lg:grid-cols-3">
-            {allPosts.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
-          </div>
-        </div>
-      )}
+      </section>
     </div>
   );
 };

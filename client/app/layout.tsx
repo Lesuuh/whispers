@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Syne, Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "./_components/home/Navbar";
 import ReactQueryProvider from "./providers/ReactQueryProviders";
 import { Analytics } from "@vercel/analytics/next";
 import InstallPWA from "./_components/InstallPWA";
+
 
 const syne = Syne({
   subsets: ["latin"],
@@ -107,21 +107,20 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <head>
-        <link rel="apple-touch-icon" href="/whispers_logo_small.png" />
-      </head>
       <body
-        className={`${syne.variable} ${inter.variable} antialiased bg-neutral-50 text-gray-900`}
+        className={`${syne.variable} ${inter.variable} antialiased bg-[#F8F8F8] text-gray-900`}
       >
         <ReactQueryProvider>
-          <Navbar />
-          <main className="min-h-screen">
-            {children} <Analytics /> <InstallPWA />
-          </main>
-          <footer className="py-8 text-center text-sm text-gray-500 border-t border-gray-200">
-            <p>
-              © {new Date().getFullYear()} Whispers — Speak Freely, Stay
-              Anonymous.
+          {/* We removed Navbar and State from here so Page.tsx can handle it */}
+          <div className="min-h-screen">
+            {children}
+            <Analytics />
+            <InstallPWA />
+          </div>
+
+          <footer className="py-12 text-center">
+            <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-gray-300">
+              © {new Date().getFullYear()} Whispers — Speak Freely.
             </p>
           </footer>
         </ReactQueryProvider>
