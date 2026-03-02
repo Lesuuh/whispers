@@ -3,70 +3,91 @@ import axios from "axios";
 import { PostCard } from "../card/PostCard";
 import { useQuery } from "@tanstack/react-query";
 import { Post } from "@/app/utils/types";
-import { usePathname } from "next/navigation";
 
 const FeedsSection = ({ selectedCategory }: { selectedCategory: string }) => {
-  const pathname = usePathname();
-  const isFeedsPage = pathname === "/feeds";
   const base_url = process.env.NEXT_PUBLIC_API_URL;
 
-  const { data: posts = [], isLoading } = useQuery<Post[]>({
-    // Added selectedCategory to queryKey so it refetches on click
-    queryKey: ["posts", selectedCategory], 
+  const { data: trending = [], isLoading: trendingLoading } = useQuery<Post[]>({
+    queryKey: ["trending"],
     queryFn: async () => {
-      const res = await axios.get(`${base_url}/posts?category=${selectedCategory}`);
+      const res = await axios.get(`${base_url}/posts/trending`);
+      return Array.isArray(res.data) ? res.data : res.data.trending || [];
+    },
+  });
+
+  const { data: posts = [], isLoading } = useQuery<Post[]>({
+    queryKey: ["posts", selectedCategory],
+    queryFn: async () => {
+      const res = await axios.get(
+        `${base_url}/posts?category=${selectedCategory}`,
+      );
       return res.data;
     },
   });
 
-  if (isLoading) {
-    return (
-      <div className="flex min-h-[400px] items-center justify-center">
-        <p className="font-mono text-xs uppercase tracking-[0.5em] text-gray-400 animate-pulse">
-          Intercepting_Signals...
-        </p>
-      </div>
-    );
-  }
+  const trendingIds = new Set(trending.map((p) => p.id));
+  const uniqueLatestPosts = posts.filter((post) => !trendingIds.has(post.id));
 
-  // Visual layout for "No Posts"
-  if (posts.length === 0) {
+  if (isLoading || trendingLoading) {
     return (
-      <div className="border-2 border-dashed border-gray-200 py-32 text-center">
-        <h4 className="font-serif text-3xl italic text-gray-300">The void is silent.</h4>
-        <p className="mt-4 font-mono text-[10px] uppercase tracking-widest text-gray-400">
-          No whispers found in {selectedCategory || "All"}
-        </p>
+      <div className="flex min-h-[400px] items-center justify-center font-mono text-[10px] uppercase tracking-[0.5em] text-gray-400">
+        <span className="animate-pulse italic">Scanning_Frequencies...</span>
       </div>
     );
   }
 
   return (
-    <div className="space-y-20">
-      {/* 01. Primary Feed */}
+    <div className="mx-auto max-w-[1400px] space-y-32 py-12">
+      {/* 01. Trending Section - High Visual Contrast */}
+      {trending.length > 0 && (
+        <section className="animate-in fade-in slide-in-from-bottom-8 duration-1000">
+          <div className="mb-12 px-2">
+            <h3 className="font-serif text-4xl italic text-black">
+              Top Echoes
+            </h3>
+            <p className="font-mono text-[9px] uppercase tracking-[0.4em] text-gray-400 mt-2">
+              High_Intensity_Signals ({trending.length})
+            </p>
+          </div>
+
+          {/* Clean grid with wide gaps instead of lines */}
+          <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3">
+            {trending.map((post) => (
+              <PostCard key={post.id} post={post} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* 02. Latest Posts Section - Simple & Minimal */}
       <section>
-        <div className="mb-8 flex items-end justify-between border-b border-black pb-2">
-          <h3 className="font-serif text-2xl italic tracking-tight text-black">
-            Latest Arrivals
+        <div className="mb-12 px-2">
+          <h3 className="font-serif text-4xl italic text-black">
+            {selectedCategory.trim() === ""
+              ? "Recent Whispers"
+              : `In ${selectedCategory}`}
           </h3>
-          <span className="font-mono text-[10px] uppercase tracking-widest text-gray-400">
-            {posts.length} Messages
-          </span>
+          <p className="font-mono text-[9px] uppercase tracking-[0.4em] text-gray-400 mt-2">
+            Live_Signal_Stream
+          </p>
         </div>
 
-        {/* Using 'gap-px bg-black' on the container + 'bg-white' on cards 
-            creates beautiful 1px divider lines between posts automatically.
-        */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-black border border-black overflow-hidden">
-          {posts.map((post) => (
-            <div key={post.id} className="bg-white hover:bg-gray-50 transition-colors">
-              <PostCard post={post} />
-            </div>
-          ))}
-        </div>
+        {uniqueLatestPosts.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-32">
+            <div className="h-px w-12 bg-gray-200 mb-6" />
+            <p className="font-serif italic text-gray-400 text-xl">
+              The void is silent.
+            </p>
+          </div>
+        ) : (
+          /* FIX: Removed 'bg-black' and 'gap-px'. Switched to a standard clean grid. */
+          <div className="grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
+            {uniqueLatestPosts.map((post) => (
+              <PostCard key={post.id} post={post} />
+            ))}
+          </div>
+        )}
       </section>
-
-      {/* Optional: Secondary "Archived" section could go here */}
     </div>
   );
 };

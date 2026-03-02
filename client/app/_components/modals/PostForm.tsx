@@ -5,38 +5,63 @@ import { useQueryClient } from "@tanstack/react-query";
 import { X, CheckCircle } from "lucide-react";
 import React, { useState } from "react";
 
-const categories = ["Thoughts", "Reflections", "Privacy", "Wellness", "Philosophy", "Tech", "Life"];
+const categories = [
+  "Thoughts",
+  "Reflections",
+  "Privacy",
+  "Wellness",
+  "Philosophy",
+  "Tech",
+  "Life",
+];
 
 const PostForm: React.FC<ModalProps> = ({ setIsOpen }) => {
   const queryClient = useQueryClient();
-  const [formData, setFormData] = useState({ title: "", category: "", content: "" });
+  const [formData, setFormData] = useState({
+    title: "",
+    category: "",
+    content: "",
+  });
   const [showCustomCategory, setShowCustomCategory] = useState(false);
-  const [message, setMessage] = useState<{ type: string | null; text: string }>({ type: null, text: "" });
+  const [message, setMessage] = useState<{ type: string | null; text: string }>(
+    { type: null, text: "" },
+  );
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handlePost = async (e: React.FormEvent<HTMLFormElement>) => {
+    console.log("fff");
     e.preventDefault();
     if (!formData.title || !formData.category || !formData.content) {
-      setMessage({ type: "error", text: "Incomplete signal. Fill all fields." });
+      setMessage({
+        type: "error",
+        text: "Incomplete signal. Fill all fields.",
+      });
+
       return;
     }
 
     try {
       await api.post(`/posts`, formData);
-      setMessage({ type: "success", text: "Whisper transmitted successfully." });
+      setMessage({
+        type: "success",
+        text: "Whisper transmitted successfully.",
+      });
       queryClient.invalidateQueries({ queryKey: ["posts"] });
       setTimeout(() => setIsOpen(false), 2000);
+      console.log(message);
     } catch (error) {
       setMessage({ type: "error", text: "Transmission failed." });
     }
   };
 
   return (
-    <div className="relative bg-white p-8 md:p-12 rounded-3xl">
+    <div className="relative bg-white p-4  rounded-3xl">
       {/* Header - Simple & Clean */}
       <div className="mb-10">
         <h2 className="font-serif text-3xl italic tracking-tighter text-black">
@@ -83,9 +108,11 @@ const PostForm: React.FC<ModalProps> = ({ setIsOpen }) => {
                   setShowCustomCategory(false);
                 }}
                 className={`px-4 py-1.5 rounded-full font-mono text-[10px] uppercase tracking-tighter transition-all
-                  ${formData.category === cat 
-                    ? "bg-black text-white" 
-                    : "bg-gray-50 text-gray-400 hover:bg-gray-100 hover:text-black"}`}
+                  ${
+                    formData.category === cat
+                      ? "bg-black text-white"
+                      : "bg-gray-50 text-gray-400 hover:bg-gray-100 hover:text-black"
+                  }`}
               >
                 {cat}
               </button>
@@ -125,16 +152,16 @@ const PostForm: React.FC<ModalProps> = ({ setIsOpen }) => {
         {/* Action Button - No thick shadows */}
         <button
           type="submit"
-          className="w-full bg-black py-5 rounded-full font-mono text-xs uppercase tracking-[0.3em] text-white hover:bg-gray-800 transition-all"
+          className="w-full cursor-pointer bg-black py-5 rounded-full font-mono text-xs uppercase tracking-[0.3em] text-white hover:bg-gray-800 transition-all"
         >
-          Transmit Signal
+          Whisper
         </button>
 
         {/* Success Feedback */}
         {message.type === "success" && (
-           <div className="flex items-center justify-center gap-2 text-black font-mono text-[10px] uppercase tracking-widest">
-              <CheckCircle size={14} /> {message.text}
-           </div>
+          <div className="flex items-center justify-center gap-2 text-black font-mono text-[10px] uppercase tracking-widest">
+            <CheckCircle size={14} /> {message.text}
+          </div>
         )}
       </form>
     </div>
