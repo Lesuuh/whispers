@@ -15,7 +15,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ setIsOpen }) => {
         <h1 className="mb-8 font-serif text-5xl font-light tracking-tight md:text-8xl lg:text-9xl">
           Everything you <br />
           <span className="italic font-extralight text-transparent bg-clip-text bg-gradient-to-b from-white to-white/30">
-            can't say
+            can&apos;t say
           </span>{" "}
           out loud.
         </h1>

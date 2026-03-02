@@ -56,6 +56,7 @@ const PostForm: React.FC<ModalProps> = ({ setIsOpen }) => {
       setTimeout(() => setIsOpen(false), 2000);
       console.log(message);
     } catch (error) {
+      console.error(error);
       setMessage({ type: "error", text: "Transmission failed." });
     }
   };
