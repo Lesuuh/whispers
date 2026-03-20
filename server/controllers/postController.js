@@ -178,9 +178,9 @@ const getTrendingPosts = async (req, res) => {
   try {
     const { data, error } = await supabase
       .from("posts")
-      .select("*, comments (*, created_at)")
+      .select("*, comments (*)")
       .order("share_count", { ascending: false })
-      .limit(3);
+      .limit(6);
 
     if (error) {
       console.error("Supabase error:", error);
