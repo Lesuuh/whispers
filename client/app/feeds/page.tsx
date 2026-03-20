@@ -3,6 +3,8 @@
 import { useState } from "react";
 import FeedsSection from "../_components/home/FeedsSection";
 import { Categories } from "../_components/home/Categories";
+// import { usePosts } from "../hooks/usePosts";
+// import { useTrending } from "../hooks/useTrending";
 
 export default function FeedsPage() {
   const [selectedCategory, setSelectedCategory] = useState(" ");
