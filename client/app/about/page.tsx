@@ -6,84 +6,84 @@ import { ArrowRight } from "lucide-react";
 const steps = [
   {
     number: "01",
-    title: "Release the Signal",
-    description:
-      "Your thoughts are encrypted the moment you hit transmit. No accounts, no tracking, no digital footprint. Just pure, raw data released into the void.",
+    title: "Write",
+    description: "Share anything on your mind without creating an identity.",
   },
   {
     number: "02",
-    title: "The Public Echo",
-    description:
-      "Once transmitted, your whisper joins the global index. It lives as a standalone piece of human experience, categorized by its essence—not its author.",
+    title: "Release",
+    description: "Your post joins a stream of anonymous thoughts from others.",
   },
   {
     number: "03",
-    title: "Anonymous Resonance",
-    description:
-      "Others interact with your signal through 'Echoes'. There are no profiles to visit, only perspectives to consider. The conversation stays focused on the thought, never the face.",
+    title: "Read",
+    description: "Discover what people are really thinking — unfiltered.",
   },
 ];
 
 export default function HowItWorks() {
   return (
-    <main className="min-h-screen bg-[#F8F8F8] pt-32 pb-32">
-      <div className="mx-auto max-w-4xl px-6">
-        {/* Header - Editorial Style */}
-        <header className="mb-24">
-          <div className="mb-6 font-mono text-[9px] uppercase tracking-[0.4em] text-purple-600 font-bold">
-            Protocol_01 // Logic
-          </div>
-          <h1 className="font-serif text-6xl md:text-8xl font-light leading-tight text-gray-900 tracking-tighter">
-            The <span className="italic">Mechanics</span> <br /> of Silence.
+    <main className="min-h-screen bg-[#F8F8F8] pt-32 pb-32 relative overflow-hidden">
+      {/* subtle background accents */}
+      <div className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-black/5 rounded-full blur-3xl" />
+      <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] bg-black/5 rounded-full blur-3xl" />
+
+      <div className="relative mx-auto max-w-5xl px-6">
+        {/* Header */}
+        <header className="mb-24 text-center">
+          <h1 className="font-serif text-5xl md:text-7xl font-light leading-tight text-gray-900 tracking-tighter">
+            How it works
           </h1>
-          <p className="mt-8 max-w-md font-serif text-xl text-gray-500 leading-relaxed">
-            Whispers is built on the belief that the most honest stories are
-            told when no one is watching.
+
+          <p className="mt-6 max-w-md mx-auto text-gray-500 leading-relaxed">
+            A simple flow designed to keep things anonymous and focused on
+            content.
           </p>
         </header>
 
-        {/* Steps Section - Pure Typographic Contrast */}
-        <section className="space-y-32">
+        {/* Steps */}
+        <section className="grid gap-10 md:grid-cols-3">
           {steps.map((step) => (
             <div
               key={step.number}
-              className="grid grid-cols-1 md:grid-cols-[100px_1fr] gap-8 items-start"
+              className={`rounded-2xl p-8 bg-white shadow-sm border border-gray-100 transition hover:shadow-md hover:-translate-y-1 duration-300`}
             >
-              {/* The Number - Ghosted Background */}
-              <span className="font-serif text-5xl italic text-gray-200 leading-none">
-                {step.number}
-              </span>
-
-              <div className="max-w-xl">
-                <h2 className="font-serif text-3xl text-gray-900 mb-6">
-                  {step.title}
-                </h2>
-                <p className="font-serif text-lg text-gray-500 leading-relaxed">
-                  {step.description}
-                </p>
+              <div className="flex items-center justify-between mb-6">
+                <span className="font-serif text-3xl text-gray-300">
+                  {step.number}
+                </span>
               </div>
+
+              <h2 className="font-serif text-2xl text-gray-900 mb-4">
+                {step.title}
+              </h2>
+
+              <p className="text-gray-500 leading-relaxed text-sm">
+                {step.description}
+              </p>
             </div>
           ))}
         </section>
 
-        {/* Bottom Call to Action - Floating White Card */}
-        <section className="mt-40 rounded-[3rem] bg-white p-12 md:p-20 shadow-sm text-center">
-          <h2 className="font-serif text-4xl md:text-5xl font-light mb-8">
-            Ready to <span className="italic">whisper?</span>
+        {/* CTA */}
+        <section className="mt-32 rounded-[2rem] bg-black text-white p-10 md:p-16 text-center">
+          <h2 className="font-serif text-3xl md:text-4xl font-light mb-6">
+            Start sharing
           </h2>
+
           <Link
             href="/"
-            className="inline-flex items-center gap-4 bg-black text-white px-12 py-5 rounded-full font-mono text-xs uppercase tracking-[0.3em] hover:bg-gray-800 transition-all hover:shadow-xl active:scale-95"
+            className="inline-flex items-center gap-3 bg-white text-black px-10 py-4 rounded-full font-mono text-xs uppercase tracking-[0.2em] hover:bg-gray-200 transition active:scale-95"
           >
-            Enter the Void <ArrowRight size={16} />
+            Go to home <ArrowRight size={16} />
           </Link>
         </section>
 
-        {/* Technical Footer Note */}
-        <footer className="mt-32 text-center">
-          <div className="h-px w-12 bg-gray-200 mx-auto mb-8" />
-          <p className="font-mono text-[9px] uppercase tracking-[0.5em] text-gray-300">
-            End to End Anonymity • Verification Not Required
+        {/* Footer */}
+        <footer className="mt-24 text-center">
+          <div className="h-px w-12 bg-gray-300 mx-auto mb-6" />
+          <p className="font-mono text-[10px] uppercase tracking-widest text-gray-400">
+            Anonymous by design • No personal data stored
           </p>
         </footer>
       </div>

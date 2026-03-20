@@ -5,7 +5,6 @@ import ReactQueryProvider from "./providers/ReactQueryProviders";
 import { Analytics } from "@vercel/analytics/next";
 import InstallPWA from "./_components/InstallPWA";
 
-
 const syne = Syne({
   subsets: ["latin"],
   variable: "--font-syne",

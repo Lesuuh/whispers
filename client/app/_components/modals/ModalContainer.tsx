@@ -27,7 +27,7 @@ export const ModalContainer: React.FC<Modal> = ({
 
   return (
     <div
-      className="fixed inset-0 z-[200] flex items-center justify-center bg-black/40 backdrop-blur-md p-4 animate-in fade-in duration-300"
+      className="fixed inset-0 z-[200] flex items-center justify-center bg-black/40 backdrop-blur-md animate-in fade-in duration-300"
       onClick={onClose}
     >
       <div
@@ -35,16 +35,7 @@ export const ModalContainer: React.FC<Modal> = ({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Content Area */}
-        <div className="px-6 py-8 md:px-12 md:py-10">
-          {children}
-        </div>
-
-        {/* Footer info - Cleaned up text (No underscores) */}
-        <div className="mt-auto bg-gray-50/50 px-10 py-4 text-center">
-          <p className="font-mono text-[9px] uppercase tracking-[0.4em] text-gray-300">
-            Secure Session Active • End to End Anonymous
-          </p>
-        </div>
+        <div className="px-4 py-6 md:px-8 md:py-8">{children}</div>
       </div>
     </div>
   );
